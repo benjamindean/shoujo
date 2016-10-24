@@ -12,9 +12,11 @@ app = Flask(
 
 @app.route("/")
 def hello():
-    with ZipFile('../test.zip', 'r') as myzip:
-        return render_template('index.html', thumbs=shoujo_cls.generate_thumbs(myzip))
+    return render_template('index.html', thumbs=shoujo_cls.generate_thumbs())
 
+@app.route('/image/<image_id>')
+def page(image_id):
+    return shoujo_cls.get_image(image_id)
 
 if __name__ == "__main__":
     sys.stdout.flush()

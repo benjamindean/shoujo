@@ -24,6 +24,17 @@ app.on('ready', function() {
     });
   };
 
+  var classname = document.getElementsByClassName("thumb-item");
+
+    var myFunction = function() {
+        var attribute = this.getAttribute("id");
+        alert(attribute);
+    };
+
+    for (var i = 0; i < classname.length; i++) {
+        classname[i].addEventListener('click', myFunction, false);
+    }
+
   var startUp = function(){
     rq(mainAddr)
       .then(function(htmlString){
