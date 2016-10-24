@@ -19,7 +19,7 @@ class Shoujo():
                 self.thumbnail_list.append(
                     {
                         'id': img.name,
-                        'base64': base64.b64encode(buffer.getvalue()).decode('UTF-8')
+                        'base64': self.__get_buffer(buffer)
                     }
                 )
 
@@ -31,4 +31,7 @@ class Shoujo():
         with ZipFile('../test.zip', 'r') as file:
             img = file.open(image_id)
             Image.open(img).save(buffer, format='PNG')
-            return base64.b64encode(buffer.getvalue()).decode('UTF-8')
+            return self.__get_buffer(buffer)
+
+    def __get_buffer(self, buffer):
+        return base64.b64encode(buffer.getvalue()).decode('UTF-8')
