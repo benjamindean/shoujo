@@ -2,8 +2,21 @@ const electron = require('electron');
 const app = electron.app;
 const ipcMain = electron.ipcMain
 const BrowserWindow = electron.BrowserWindow;
+require('electron-debug')()
 
 var mainWindow = null;
+
+const instanceRunning = app.makeSingleInstance(() => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore()
+    }
+  }
+})
+
+if (instanceRunning) {
+  app.quit()
+}
 
 app.on('window-all-closed', function() {
     app.quit();
@@ -15,7 +28,10 @@ app.on('ready', function() {
   var mainAddr = 'http://localhost:5000';
 
   var openWindow = function(){
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600
+    });
     mainWindow.loadURL('http://localhost:5000');
     mainWindow.webContents.openDevTools();
 
