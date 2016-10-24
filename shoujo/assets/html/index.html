@@ -1,0 +1,10 @@
+<!doctype html>
+<link rel="stylesheet" href="https://unpkg.com/blaze">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+<div class="thumbnails">
+  {% for thumb in thumbs %}
+    <a href="#" class="thumb-item" id="{{ thumb.id }}">
+      <img class="thumb" src="data:image/png;base64,{{ thumb.base64 }}"/>
+    </a>
+  {% endfor %}
+</div>
