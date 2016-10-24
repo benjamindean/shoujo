@@ -1,5 +1,6 @@
 const electron = require('electron');
 const app = electron.app;
+const ipcMain = electron.ipcMain
 const BrowserWindow = electron.BrowserWindow;
 
 var mainWindow = null;
@@ -23,17 +24,6 @@ app.on('ready', function() {
       subpy.kill('SIGINT');
     });
   };
-
-  var classname = document.getElementsByClassName("thumb-item");
-
-    var myFunction = function() {
-        var attribute = this.getAttribute("id");
-        alert(attribute);
-    };
-
-    for (var i = 0; i < classname.length; i++) {
-        classname[i].addEventListener('click', myFunction, false);
-    }
 
   var startUp = function(){
     rq(mainAddr)
