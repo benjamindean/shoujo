@@ -1,21 +1,22 @@
 const electron = require('electron');
 const app = electron.app;
+const path = require('path')
 const ipcMain = electron.ipcMain
 const BrowserWindow = electron.BrowserWindow;
-require('electron-debug')()
+require('electron-debug')();
 
 var mainWindow = null;
 
 const instanceRunning = app.makeSingleInstance(() => {
   if (mainWindow) {
     if (mainWindow.isMinimized()) {
-      mainWindow.restore()
+      mainWindow.restore();
     }
   }
-})
+});
 
 if (instanceRunning) {
-  app.quit()
+  app.quit();
 }
 
 app.on('window-all-closed', function() {
@@ -30,7 +31,11 @@ app.on('ready', function() {
   var openWindow = function(){
     mainWindow = new BrowserWindow({
         width: 800,
-        height: 600
+        height: 600,
+        webPreferences: {
+          preload: path.join(__dirname, 'browser.js'),
+          nodeIntegration: false
+        }
     });
     mainWindow.loadURL('http://localhost:5000');
     mainWindow.webContents.openDevTools();

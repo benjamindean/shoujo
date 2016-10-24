@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "main": "main.js",
   "dependencies": {
-    "request-promise": "*",
-    "electron-prebuilt": "*"
+    "electron-prebuilt": "*",
+    "element-ready": "^0.2.0",
+    "request-promise": "*"
   },
   "devDependencies": {
     "electron-debug": "^1.0.1"
