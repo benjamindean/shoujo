@@ -19,14 +19,14 @@ const template = [
         label: 'Reload',
         accelerator: 'Ctrl+R',
         click (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.reload()
+          if (focusedWindow) focusedWindow.reload();
         }
       },
       {
         label: 'Fullscreen',
         accelerator: 'F',
-        click (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.maximize()
+        click (item, mainWindow) {
+          mainWindow.setFullScreen(!mainWindow.isFullScreen());
         }
       }
     ]
