@@ -1,12 +1,42 @@
+.html, body {
+    overflow: hidden;
+}
+
 .thumbnails {
+    padding-top: 20px;
     overflow-y: scroll;
     overflow-x: hidden;
     position: fixed;
-    width: 200px;
+    width: 20%;
+    max-width: 200px;
     height: 100%;
     background: #eee;
 }
 
-.thumb {
+.thumbnails .thumb {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.thumbnails a {
     margin: 0 20px 20px 20px;
+    display: inline-block;
+}
+
+.page {
+    width: 100%;
+    display: block;
+    position: absolute;
+    height: 100%;
+    left: 20%;
+}
+
+.page img {
+    margin: 0;
+    background: yellow;
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
 }

@@ -1,13 +1,19 @@
 <!doctype html>
-<link rel="stylesheet" href="https://unpkg.com/blaze">
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+<html>
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/blaze">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
 <div class="thumbnails">
-  {% for thumb in thumbs %}
-    <a href="#" class="thumb-item" id="{{ thumb.id }}">
-      <img class="thumb" src="data:image/png;base64,{{ thumb.base64 }}"/>
+    {% for thumb in thumbs %}
+    <a href="#" class="thumb-item">
+        <img class="thumb" id="{{ thumb.id }}" src="file:///{{ thumb.url }}"/>
     </a>
-  {% endfor %}
+    {% endfor %}
 </div>
 <div class="page">
-  <img src=""/>
+    <img src=""/>
 </div>
+</body>
+</html>

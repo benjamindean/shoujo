@@ -1,5 +1,4 @@
 import sys
-from zipfile import ZipFile
 from flask import Flask, render_template
 from shoujo import Shoujo
 

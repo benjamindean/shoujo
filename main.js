@@ -34,7 +34,8 @@ app.on('ready', function () {
             height: 600,
             webPreferences: {
                 preload: path.join(__dirname, 'browser.js'),
-                nodeIntegration: false
+                nodeIntegration: false,
+                webSecurity: false
             }
         });
         mainWindow.loadURL('http://localhost:5000');
@@ -52,7 +53,7 @@ app.on('ready', function () {
                 openWindow();
             })
             .catch(function (err) {
-                startUp();
+                console.log(err);
             });
     };
 

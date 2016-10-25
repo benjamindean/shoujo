@@ -5,6 +5,7 @@
   "dependencies": {
     "electron-prebuilt": "*",
     "element-ready": "^0.2.0",
+    "request": "^2.75.0",
     "request-promise": "*"
   },
   "devDependencies": {
