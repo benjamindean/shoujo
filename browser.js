@@ -40,12 +40,11 @@ var listenNextImage = function() {
         e.preventDefault();
         let id = e.target.getAttribute('data-id');
         if(!id) return;
-
         loadXMLDoc('http://localhost:5000/image/next/' + encodeURI(id), function(response) {
             response = JSON.parse(response);
             var main_image = $('#mainImage')[0];
             main_image.setAttribute('data-id', response['id']);
-            main_image.setAttribute('src', 'file://' + response['next']);
+            main_image.setAttribute('src', 'file://' + response['url']);
         });
     });
 };
