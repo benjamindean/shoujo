@@ -8,7 +8,6 @@
     overflow-x: hidden;
     position: fixed;
     width: 20%;
-    max-width: 200px;
     height: 100%;
     background: #eee;
 }
@@ -31,11 +30,15 @@
     left: 20%;
 }
 
-.page img {
+.page .page-image {
     margin: 0;
     position: absolute;
     top: 50%;
     left: 40%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
+}
+
+.page .page-image.fit-width {
+    width: 80%;
 }

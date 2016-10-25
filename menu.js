@@ -21,6 +21,13 @@ const template = [
         click (item, focusedWindow) {
           if (focusedWindow) focusedWindow.reload()
         }
+      },
+      {
+        label: 'Fullscreen',
+        accelerator: 'F',
+        click (item, focusedWindow) {
+          if (focusedWindow) focusedWindow.maximize()
+        }
       }
     ]
   },
