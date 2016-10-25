@@ -1,5 +1,6 @@
 const electron = require('electron');
 const app = electron.app;
+const appMenu = require('./menu');
 const path = require('path');
 const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
@@ -40,6 +41,7 @@ app.on('ready', function () {
         });
         mainWindow.loadURL('http://localhost:5000');
         mainWindow.webContents.openDevTools();
+        electron.Menu.setApplicationMenu(appMenu);
 
         mainWindow.on('closed', function () {
             mainWindow = null;

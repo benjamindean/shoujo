@@ -1,4 +1,5 @@
 import os
+import json
 from zipfile import ZipFile
 from PIL import Image
 
@@ -46,3 +47,11 @@ class Shoujo():
 
     def get_image(self, image_id):
         return os.path.join(self.volume_path, image_id)
+
+    def get_next_image(self, image_id):
+        for id, image in enumerate(self.thumbnail_list):
+            if image['id'] == image_id:
+                return json.dumps({
+                    'next': os.path.join(self.volume_path, self.thumbnail_list[id + 1]['id']),
+                    'id': self.thumbnail_list[id + 1]['id']
+                })
