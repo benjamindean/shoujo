@@ -1,6 +1,6 @@
 const electron = require('electron');
 const elementReady = require('element-ready');
-
+const config = require('./config');
 const ipcRenderer = electron.ipcRenderer;
 const $ = document.querySelectorAll.bind(document);
 
@@ -27,10 +27,10 @@ var listenThumbnails = function () {
         e.preventDefault();
         let id = e.target.getAttribute('id');
         if(!id) return;
-        loadXMLDoc('http://localhost:5000/image/' + encodeURI(id), function(response) {
+        loadXMLDoc(`${config.host}/image/` + encodeURI(id), function(response) {
             var main_image = $('#mainImage')[0];
             main_image.setAttribute('data-id', id);
-            main_image.setAttribute('src', 'file://' + response);
+            main_image.setAttribute('src', `file://${response}`);
         });
     });
 };
@@ -40,11 +40,11 @@ var listenNextImage = function() {
         e.preventDefault();
         let id = e.target.getAttribute('data-id');
         if(!id) return;
-        loadXMLDoc('http://localhost:5000/image/next/' + encodeURI(id), function(response) {
+        loadXMLDoc(`${config.host}/image/next/` + encodeURI(id), function(response) {
             response = JSON.parse(response);
             var main_image = $('#mainImage')[0];
             main_image.setAttribute('data-id', response['id']);
-            main_image.setAttribute('src', 'file://' + response['url']);
+            main_image.setAttribute('src', `file://${response['url']}`);
         });
     });
 };

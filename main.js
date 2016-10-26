@@ -1,9 +1,10 @@
 const electron = require('electron');
 const app = electron.app;
-const appMenu = require('./menu');
 const path = require('path');
 const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
+const appMenu = require('./menu');
+const config = require('./config');
 require('electron-debug')();
 
 var mainWindow = null;
@@ -27,7 +28,7 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
     var subpy = require('child_process').spawn('python', ['./shoujo/server.py']);
     var rq = require('request-promise');
-    var mainAddr = 'http://localhost:5000';
+    var mainAddr = config.host;
 
     var openWindow = function () {
         mainWindow = new BrowserWindow({
@@ -39,7 +40,7 @@ app.on('ready', function () {
                 webSecurity: false
             }
         });
-        mainWindow.loadURL('http://localhost:5000');
+        mainWindow.loadURL(mainAddr);
         mainWindow.webContents.openDevTools();
         electron.Menu.setApplicationMenu(appMenu);
 
