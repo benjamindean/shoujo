@@ -9,6 +9,8 @@ require('electron-debug')();
 
 var mainWindow = null;
 
+const file = process.argv[2];
+
 const instanceRunning = app.makeSingleInstance(() => {
     if (mainWindow) {
         if (mainWindow.isMinimized()) {
@@ -28,7 +30,7 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
     var subpy = require('child_process').spawn('python', ['./shoujo/server.py']);
     var rq = require('request-promise');
-    var mainAddr = config.host;
+    var mainAddr = `${config.host}/${file}`;
 
     var openWindow = function () {
         mainWindow = new BrowserWindow({

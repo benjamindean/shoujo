@@ -9,9 +9,9 @@ app = Flask(
     static_folder='assets'
 )
 
-@app.route("/")
-def hello():
-    return render_template('index.html', thumbs=shoujo_cls.generate_thumbs())
+@app.route("/<file>")
+def hello(file):
+    return render_template('index.html', thumbs=shoujo_cls.generate_thumbs(file))
 
 @app.route('/image/<image_id>')
 def get_image(image_id):

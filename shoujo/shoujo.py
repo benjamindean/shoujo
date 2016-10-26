@@ -11,17 +11,17 @@ class Shoujo():
         self.volume_path = None
         self.thumbs_path = None
 
-    def extract_file(self):
-        with ZipFile('test.zip', 'r') as file:
+    def extract_file(self, file):
+        with ZipFile(file, 'r') as file:
             self.filename = os.path.splitext(file.filename)[0]
             self.set_paths()
             if os.listdir(self.volume_path) is []:
                 file.extractall(self.volume_path)
 
-    def generate_thumbs(self):
+    def generate_thumbs(self, file):
         if self.thumbnail_list: return self.thumbnail_list
 
-        self.extract_file()
+        self.extract_file(file)
         self.thumbnail_list = list()
 
         for directory, subdirectories, files in os.walk(self.volume_path):
