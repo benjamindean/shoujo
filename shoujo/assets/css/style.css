@@ -40,5 +40,6 @@
 }
 
 .page .page-image.fit-width {
-    width: 80%;
+    max-width: 80%;
+    height: auto;
 }
