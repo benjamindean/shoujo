@@ -15,7 +15,7 @@ class Shoujo():
         with ZipFile('test.zip', 'r') as file:
             self.filename = os.path.splitext(file.filename)[0]
             self.set_paths()
-            if os.listdir(self.volume_path) is not []:
+            if os.listdir(self.volume_path) is []:
                 file.extractall(self.volume_path)
 
     def generate_thumbs(self):
@@ -29,7 +29,8 @@ class Shoujo():
                 with open(os.path.join(directory, file), 'r') as image:
                     thumb = Image.open(image)
                     thumb.thumbnail((200, 200), Image.ANTIALIAS)
-                    thumb.save(os.path.join(self.thumbs_path, file), 'PNG')
+                    thumb.save(os.path.join(self.thumbs_path, file), thumb.format)
+                    print(file)
                     self.thumbnail_list.append(
                         {
                             'id': file,
@@ -40,16 +41,18 @@ class Shoujo():
         return self.thumbnail_list
 
     def set_paths(self):
-        self.volume_path = '%s/%s' % (os.path.expanduser('~/.config/shoujo/volume_cache'), self.filename)
-        self.thumbs_path = os.path.join(self.volume_path, 'thumbs')
-        if not os.path.isdir(self.thumbs_path):
-            os.makedirs(self.thumbs_path)
+        self.volume_path = os.path.join(os.path.expanduser('~/.config/shoujo/volume_cache'), self.filename, 'original')
+        self.thumbs_path = os.path.join(os.path.expanduser('~/.config/shoujo/volume_cache'), self.filename, 'thumbs')
+        if not os.path.isdir(self.volume_path): os.makedirs(self.volume_path)
+        if not os.path.isdir(self.thumbs_path): os.makedirs(self.thumbs_path)
 
     def get_image(self, image_id):
         return os.path.join(self.volume_path, image_id)
 
     def get_next_image(self, image_id):
         for id, image in enumerate(self.thumbnail_list):
+            if id == len(self.thumbnail_list) - 1:
+                return 'The End'
             if image['id'] == image_id:
                 return json.dumps({
                     'id': self.thumbnail_list[id + 1]['id'],
