@@ -48,6 +48,15 @@ app.on('ready', function () {
             mainWindow = null;
             subpy.kill('SIGINT');
         });
+
+        mainWindow.on('enter-full-screen', function () {
+            this.webContents.send('toggle-full-screen', true);
+        });
+
+        mainWindow.on('leave-full-screen', function () {
+            this.webContents.send('toggle-full-screen', false);
+        });
+
     };
 
     var startUp = function () {
