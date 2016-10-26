@@ -36,6 +36,8 @@ app.on('ready', function () {
         mainWindow = new BrowserWindow({
             width: 800,
             height: 600,
+            minWidth: 800,
+            minHeight: 600,
             webPreferences: {
                 preload: path.join(__dirname, 'browser.js'),
                 nodeIntegration: false,
