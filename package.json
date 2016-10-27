@@ -4,6 +4,7 @@
   "main": "main.js",
   "dependencies": {
     "electron": "*",
+    "electron-settings": "^2.2.2",
     "element-ready": "^0.2.0",
     "request-promise": "*"
   },
