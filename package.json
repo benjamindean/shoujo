@@ -2,13 +2,22 @@
   "name": "Shoujo",
   "version": "0.0.1",
   "main": "main.js",
+  "repository": "benjamindean/shoujo",
+  "author": {
+    "name": "Benjamin Dean",
+    "email": "benjamin.dean@noaddress.com",
+    "url": "github.com/benjamindean"
+  },
+  "scripts": {
+    "start": "electron . test.zip"
+  },
   "dependencies": {
     "electron": "*",
-    "electron-settings": "^2.2.2",
-    "element-ready": "^0.2.0",
+    "electron-settings": "*",
+    "element-ready": "*",
     "request-promise": "*"
   },
   "devDependencies": {
-    "electron-debug": "^1.0.1"
+    "electron-debug": "*"
   }
 }
