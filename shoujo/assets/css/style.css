@@ -13,7 +13,7 @@ html, body {
     position: fixed;
     width: 20%;
     height: 100%;
-    background: #eee;
+    border-right: 1px solid #404040;
 }
 
 .thumbnails .thumb {
@@ -21,6 +21,7 @@ html, body {
     max-height: 100%;
     margin: 0 auto;
     display: block;
+    border: 1px solid #404040;
 }
 
 .thumbnails a {
@@ -50,4 +51,8 @@ html, body {
 .page .page-image.fit-width {
     max-width: 80%;
     height: auto;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }

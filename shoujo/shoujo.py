@@ -8,15 +8,14 @@ class Shoujo():
     def __init__(self):
         self.thumbnail_list = None
         self.filename = None
-        self.volume_path = None
+        self.origin_path = None
         self.thumbs_path = None
 
     def extract_file(self, file):
         with ZipFile(file, 'r') as file:
             self.filename = os.path.splitext(file.filename)[0]
             self.set_paths()
-            if os.listdir(self.volume_path) is []:
-                file.extractall(self.volume_path)
+            file.extractall(self.origin_path)
 
     def generate_thumbs(self, file):
         if self.thumbnail_list: return self.thumbnail_list
@@ -24,7 +23,7 @@ class Shoujo():
         self.extract_file(file)
         self.thumbnail_list = list()
 
-        for directory, subdirectories, files in os.walk(self.volume_path):
+        for directory, subdirectories, files in os.walk(self.origin_path):
             for file in files:
                 with open(os.path.join(directory, file), 'r') as image:
                     thumb = Image.open(image)
@@ -41,13 +40,13 @@ class Shoujo():
         return self.thumbnail_list
 
     def set_paths(self):
-        self.volume_path = os.path.join(os.path.expanduser('~/.config/shoujo/volume_cache'), self.filename, 'original')
-        self.thumbs_path = os.path.join(os.path.expanduser('~/.config/shoujo/volume_cache'), self.filename, 'thumbs')
-        if not os.path.isdir(self.volume_path): os.makedirs(self.volume_path)
+        self.origin_path = os.path.join(os.path.expanduser('~/.config/Shoujo/volume_cache'), self.filename, 'original')
+        self.thumbs_path = os.path.join(os.path.expanduser('~/.config/Shoujo/volume_cache'), self.filename, 'thumbs')
+        if not os.path.isdir(self.origin_path): os.makedirs(self.origin_path)
         if not os.path.isdir(self.thumbs_path): os.makedirs(self.thumbs_path)
 
     def get_image(self, image_id):
-        return os.path.join(self.volume_path, image_id)
+        return os.path.join(self.origin_path, image_id)
 
     def get_next_image(self, image_id):
         for id, image in enumerate(self.thumbnail_list):
@@ -56,5 +55,5 @@ class Shoujo():
             if image['id'] == image_id:
                 return json.dumps({
                     'id': self.thumbnail_list[id + 1]['id'],
-                    'url': os.path.join(self.volume_path, self.thumbnail_list[id + 1]['id'])
+                    'url': os.path.join(self.origin_path, self.thumbnail_list[id + 1]['id'])
                 })
