@@ -1,5 +1,5 @@
 import sys
-from flask import Flask, Response, render_template
+from flask import Flask, render_template
 from shoujo import Shoujo
 
 shoujo_cls = Shoujo()

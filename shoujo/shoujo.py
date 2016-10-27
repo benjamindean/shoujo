@@ -1,5 +1,7 @@
+import shutil
 import json
 import os
+
 from zipfile import ZipFile
 from PIL import Image
 
@@ -11,11 +13,21 @@ class Shoujo():
         self.origin_path = None
         self.thumbs_path = None
 
-    def extract_file(self, file):
-        with ZipFile(file, 'r') as file:
-            self.filename = os.path.splitext(file.filename)[0]
+    def extract_file(self, zipfile):
+        with ZipFile(zipfile, 'r') as zip_file:
+            self.filename = os.path.splitext(zip_file.filename)[0]
             self.set_paths()
-            file.extractall(self.origin_path)
+            if os.listdir(self.origin_path) != []: return
+            for member in zip_file.namelist():
+                filename = os.path.basename(member)
+
+                if not filename:
+                    continue
+
+                source = zip_file.open(member)
+                target = file(os.path.join(self.origin_path, filename), "wb")
+                with source, target:
+                    shutil.copyfileobj(source, target)
 
     def generate_thumbs(self, file):
         if self.thumbnail_list: return self.thumbnail_list
@@ -24,12 +36,11 @@ class Shoujo():
         self.thumbnail_list = list()
 
         for directory, subdirectories, files in os.walk(self.origin_path):
-            for file in files:
+            for file in sorted(files):
                 with open(os.path.join(directory, file), 'r') as image:
                     thumb = Image.open(image)
                     thumb.thumbnail((200, 200), Image.ANTIALIAS)
                     thumb.save(os.path.join(self.thumbs_path, file), thumb.format)
-                    print(file)
                     self.thumbnail_list.append(
                         {
                             'id': file,
