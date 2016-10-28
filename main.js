@@ -3,8 +3,8 @@ const app = electron.app;
 const path = require('path');
 const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
-const appMenu = require('./menu');
-const config = require('./config');
+const appMenu = require('./shoujo/assets/js/menu');
+const config = require('./shoujo/assets/js/config');
 require('electron-debug')();
 
 var mainWindow = null;
@@ -39,7 +39,7 @@ app.on('ready', function () {
             minWidth: 800,
             minHeight: 600,
             webPreferences: {
-                preload: path.join(__dirname, 'browser.js'),
+                preload: path.join(__dirname, 'shoujo/assets/js/browser.js'),
                 nodeIntegration: false,
                 webSecurity: false
             }
