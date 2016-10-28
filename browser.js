@@ -31,8 +31,13 @@ var listenThumbnails = function () {
             var main_image = $('#mainImage')[0];
             main_image.setAttribute('data-id', id);
             main_image.setAttribute('src', `file://${response}`);
+            scrollTop();
         });
     });
+};
+
+var scrollTop = function () {
+    $('.image-container')[0].scrollTop = 0;
 };
 
 var toggleFullScreen = function (state) {
@@ -50,6 +55,7 @@ var listenNextImage = function () {
             var main_image = $('#mainImage')[0];
             main_image.setAttribute('data-id', response['id']);
             main_image.setAttribute('src', `file://${response['url']}`);
+            scrollTop();
         });
     });
 };
