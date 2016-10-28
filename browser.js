@@ -35,8 +35,9 @@ var listenThumbnails = function () {
     });
 };
 
-var toggleThumbnails = function (state) {
+var toggleFullScreen = function (state) {
     $('.thumbnails')[0].style.display = state ? "none" : "block";
+    $('.page-image')[0].style.float = state ? "none" : "right";
 };
 
 var listenNextImage = function () {
@@ -59,5 +60,5 @@ elementReady('html').then(function () {
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {
-    toggleThumbnails(state);
+    toggleFullScreen(state);
 });
