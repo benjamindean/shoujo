@@ -6,17 +6,18 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.min.css') }}">
 </head>
 <body>
-<div class="thumbnails">
+<div id="thumbnails">
     {% for thumb in thumbs %}
     <a href="#" class="thumb-item">
         <img class="thumb" id="{{ thumb.id }}" src="file:///{{ thumb.url }}"/>
     </a>
     {% endfor %}
 </div>
-<div class="page">
+<div id="page">
     <div class="image-container">
         <img class="page-image fit-width" id="mainImage" src=""/>
     </div>
 </div>
+<div id="clearfix"></div>
 </body>
 </html>

@@ -23,7 +23,7 @@ var loadXMLDoc = function (url, callback) {
 };
 
 var listenThumbnails = function () {
-    $('.thumbnails')[0].addEventListener('click', function (e) {
+    $('#thumbnails')[0].addEventListener('click', function (e) {
         e.preventDefault();
         let id = e.target.getAttribute('id');
         if (!id) return;
@@ -41,7 +41,7 @@ var scrollTop = function () {
 };
 
 var toggleFullScreen = function (state) {
-    $('.thumbnails')[0].style.display = state ? "none" : "block";
+    $('#thumbnails')[0].style.display = state ? "none" : "block";
     $('.page-image')[0].style.float = state ? "none" : "right";
 };
 

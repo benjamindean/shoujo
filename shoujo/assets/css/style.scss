@@ -10,7 +10,7 @@ html, body {
   min-height: 100%;
 }
 
-.thumbnails {
+#thumbnails {
   padding-top: 20px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -33,7 +33,7 @@ html, body {
   }
 }
 
-.page {
+#page {
   width: 100%;
   display: block;
   height: 100%;
@@ -53,6 +53,10 @@ html, body {
       height: auto;
     }
   }
+}
+
+#clearfix {
+  clear: both;
 }
 
 ::-webkit-scrollbar {
