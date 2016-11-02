@@ -37,7 +37,7 @@ var listenThumbnails = function () {
 };
 
 var scrollTop = function () {
-    $('.image-container')[0].scrollTop = 0;
+    $('body')[0].scrollTop = 0;
 };
 
 var toggleFullScreen = function (state) {
