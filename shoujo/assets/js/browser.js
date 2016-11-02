@@ -60,7 +60,7 @@ var listenNextImage = function () {
     });
 };
 
-elementReady('html').then(function () {
+elementReady('#mainImage').then(function () {
     listenThumbnails();
     listenNextImage();
 });
