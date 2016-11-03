@@ -22,13 +22,27 @@ html, body {
   .thumb {
     max-width: 100%;
     max-height: 100%;
-    margin: 0 auto;
-    display: block;
     border: 1px solid $main_color;
   }
   a {
     margin: 0 20px 20px;
-    display: block;
+    display: flex;
+    position: relative;
+    .thumb-wrapper {
+      position: relative;
+      display: inline-block;
+      margin: 0 auto;
+      .thumb-id {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        background: $main_color;
+        padding: 5px;
+        color: #fff;
+        font-weight: 600;
+        font-size: 13px;
+      }
+    }
   }
 }
 

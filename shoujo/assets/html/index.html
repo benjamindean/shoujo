@@ -9,7 +9,10 @@
 <div id="thumbnails">
     {% for thumb in thumbs %}
     <a href="#" class="thumb-item">
-        <img class="thumb" id="{{ thumb.id }}" src="file:///{{ thumb.url }}"/>
+        <div class="thumb-wrapper">
+            <img class="thumb" id="{{ thumb.name }}" src="file:///{{ thumb.url }}"/>
+            <span class="thumb-id">{{ thumb.id }}</span>
+        </div>
     </a>
     {% endfor %}
 </div>

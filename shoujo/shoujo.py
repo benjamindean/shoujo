@@ -36,14 +36,15 @@ class Shoujo():
         self.thumbnail_list = list()
 
         for directory, subdirectories, files in os.walk(self.origin_path):
-            for file in sorted(files):
+            for idx, file in enumerate(sorted(files)):
                 with open(os.path.join(directory, file), 'r') as image:
                     thumb = Image.open(image)
                     thumb.thumbnail((200, 200), Image.ANTIALIAS)
                     thumb.save(os.path.join(self.thumbs_path, file), thumb.format)
                     self.thumbnail_list.append(
                         {
-                            'id': file,
+                            'id': idx + 1,
+                            'name': file,
                             'url': os.path.join(self.thumbs_path, file)
                         }
                     )
