@@ -1,8 +1,11 @@
 import sys
 from flask import Flask, render_template
-from shoujo import Shoujo
+from shoujo import shoujo
+from shoujo import config
 
-shoujo_cls = Shoujo()
+shoujo_cls = shoujo.Shoujo()
+config_cls = config.Config()
+
 app = Flask(
     __name__,
     template_folder='assets/html',
@@ -15,8 +18,8 @@ def hello(file):
     return render_template(
         'index.html',
         thumbs=thumbs,
-        image_name=thumbs[0]['name'],
-        image_path=shoujo_cls.get_image(thumbs[0]['name'])
+        image_name=config_cls.get_value('last_image_name') or thumbs[0]['name'],
+        image_path=config_cls.get_value('last_image_path') or shoujo_cls.get_image(thumbs[0]['name'])
     )
 
 @app.route('/image/<image_id>')

@@ -5,7 +5,6 @@ import os
 from zipfile import ZipFile
 from PIL import Image
 
-
 class Shoujo():
     def __init__(self):
         self.thumbnail_list = None
