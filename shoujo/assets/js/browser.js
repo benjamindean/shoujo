@@ -53,7 +53,7 @@ var listenNextImage = function () {
         loadXMLDoc(`${config.host}/image/next/` + encodeURI(id), function (response) {
             response = JSON.parse(response);
             var main_image = $('#mainImage')[0];
-            main_image.setAttribute('data-id', response['id']);
+            main_image.setAttribute('data-id', response['name']);
             main_image.setAttribute('src', `file://${response['url']}`);
             scrollTop();
         });

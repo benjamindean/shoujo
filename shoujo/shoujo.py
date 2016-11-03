@@ -64,8 +64,8 @@ class Shoujo():
         for id, image in enumerate(self.thumbnail_list):
             if id == len(self.thumbnail_list) - 1:
                 return 'The End'
-            if image['id'] == image_id:
+            if image['name'] == image_id:
                 return json.dumps({
-                    'id': self.thumbnail_list[id + 1]['id'],
-                    'url': os.path.join(self.origin_path, self.thumbnail_list[id + 1]['id'])
+                    'name': self.thumbnail_list[id + 1]['name'],
+                    'url': os.path.join(self.origin_path, self.thumbnail_list[id + 1]['name'])
                 })
