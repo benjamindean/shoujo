@@ -1,16 +1,20 @@
 import shutil
+import atexit
 import json
 import os
 
 from zipfile import ZipFile
 from PIL import Image
 
+
 class Shoujo():
     def __init__(self):
         self.image_list = list()
         self.filename = None
+        self.volume_path = None
         self.origin_path = None
         self.thumbs_path = None
+        atexit.register(self.clear_cache)
 
     def extract_file(self, zipfile):
         if len(self.image_list): return
@@ -45,10 +49,12 @@ class Shoujo():
                     thumb.save(os.path.join(self.thumbs_path, file), thumb.format)
 
     def set_paths(self):
-        self.origin_path = os.path.join(os.path.expanduser('~/.config/Shoujo/volume_cache'), self.filename, 'original')
-        self.thumbs_path = os.path.join(os.path.expanduser('~/.config/Shoujo/volume_cache'), self.filename, 'thumbs')
-        if not os.path.isdir(self.origin_path): os.makedirs(self.origin_path)
-        if not os.path.isdir(self.thumbs_path): os.makedirs(self.thumbs_path)
+        self.volume_path = os.path.join(os.path.expanduser('~/.config/Shoujo/volume_cache'), self.filename)
+        self.origin_path = os.path.join(self.volume_path, 'original')
+        self.thumbs_path = os.path.join(self.volume_path, 'thumbs')
+        if not os.path.isdir(self.volume_path): os.makedirs(self.volume_path)
+        if not os.path.isdir(self.origin_path): os.mkdir(self.origin_path)
+        if not os.path.isdir(self.thumbs_path): os.mkdir(self.thumbs_path)
 
     def get_image(self, image_name):
         return json.dumps({
@@ -68,3 +74,6 @@ class Shoujo():
                     'name': self.image_list[id + 1]['name'],
                     'path': os.path.join(self.origin_path, self.image_list[id + 1]['name'])
                 })
+
+    def clear_cache(self):
+        shutil.rmtree(self.volume_path)

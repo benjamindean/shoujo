@@ -26,7 +26,12 @@ class Config(object):
         Create config file with some default values.
         """
         config_dict = {}
-        os.makedirs(os.path.dirname(self.CONFIG_FILE), exist_ok=True)
+
+        try:
+            os.makedirs(os.path.dirname(self.CONFIG_FILE))
+        except FileExistsError as exc:
+            pass
+
         with open(self.CONFIG_FILE, 'w') as config_file:
             json.dump(config_dict, config_file)
 
