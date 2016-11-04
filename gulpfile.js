@@ -12,5 +12,5 @@ gulp.task('css', function () {
 });
 
 gulp.task('default', ['css'], function () {
-    gulp.watch('shoujo/public/css/*.scss', ['css']);
+    gulp.watch('shoujo/public/css/partials/*.scss', ['css']);
 });

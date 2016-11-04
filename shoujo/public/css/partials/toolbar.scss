@@ -1,0 +1,10 @@
+#toolbar {
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid black;
+  position: fixed;
+  background: white;
+  z-index: 11;
+  align-items: center;
+  justify-content: center;
+}
