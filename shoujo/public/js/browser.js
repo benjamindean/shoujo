@@ -44,9 +44,10 @@ var listenThumbnails = function () {
     });
 };
 
+var pageWidth = 0;
 var toggleFullScreen = function (state) {
     $('#thumbnails')[0].style.display = state ? "none" : "block";
-    $('#page')[0].style.width = state ? "100%" : "80%";
+    $('#page')[0].style.width = state ? "100%" : pageWidth;
 };
 
 var listenNextImage = function () {
@@ -57,6 +58,7 @@ var listenNextImage = function () {
 };
 
 elementReady('#mainImage').then(function () {
+    pageWidth = $('#page')[0].style.width;
     listenThumbnails();
     listenNextImage();
 });
