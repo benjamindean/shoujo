@@ -2,5 +2,7 @@ node_modules/
 .venv
 venv
 *.pyc
+*.log
 test.zip
 .idea/
+dist/

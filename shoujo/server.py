@@ -1,5 +1,5 @@
 import sys
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from classes.config import Config
 from classes.shoujo import Shoujo
@@ -13,8 +13,9 @@ app = Flask(
     static_folder='public'
 )
 
-@app.route("/<file>")
-def hello(file):
+@app.route("/")
+def hello():
+    file = request.args.get('file')
     shoujo_cls.extract_file(file)
     shoujo_cls.generate_thumbs(file)
 

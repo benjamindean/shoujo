@@ -5,11 +5,11 @@ const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
 const appMenu = require('./shoujo/public/js/menu');
 const config = require('./shoujo/public/js/config');
-require('electron-debug')();
 
 var mainWindow = null;
 
-const file = process.argv[2];
+const file = process.argv[2] || process.argv[1];
+console.log(__dirname);
 
 const instanceRunning = app.makeSingleInstance(() => {
     if (mainWindow) {
@@ -28,9 +28,9 @@ app.on('window-all-closed', function () {
 });
 
 app.on('ready', function () {
-    var subpy = require('child_process').spawn('python', ['./shoujo/server.py']);
+    var subpy = require('child_process').spawn('python', [path.join(__dirname, 'shoujo/server.py')]);
     var rq = require('request-promise');
-    var mainAddr = `${config.host}/${file}`;
+    var mainAddr = `${config.host}/?file=${file}`;
 
     var openWindow = function () {
         mainWindow = new BrowserWindow({
@@ -43,7 +43,7 @@ app.on('ready', function () {
                 nodeIntegration: false,
                 webSecurity: false
             },
-            icon: path.join(__dirname, 'shoujo/public/images/icon.png')
+            icon: path.join(__dirname, 'resources/Icon.png')
         });
         mainWindow.loadURL(mainAddr);
         mainWindow.webContents.openDevTools();
