@@ -12,7 +12,7 @@
     <a href="#" class="thumb-item">
         <div class="thumb-wrapper">
             <img class="thumb" data-id="{{ thumb.name }}" id="{{ thumb.name }}" src="file:///{{ thumbs_path }}/{{ thumb.name }}"/>
-            <span class="thumb-id">{{ thumb.id }}</span>
+            <span class="thumb-id">{{ thumb.id + 1 }}</span>
         </div>
     </a>
     {% endfor %}
