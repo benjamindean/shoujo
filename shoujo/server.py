@@ -15,12 +15,18 @@ app = Flask(
 
 @app.route("/<file>")
 def hello(file):
-    thumbs = shoujo_cls.generate_thumbs(file)
+    shoujo_cls.extract_file(file)
+    shoujo_cls.generate_thumbs(file)
+
+    image_list = shoujo_cls.image_list
+    thumbs_path = shoujo_cls.thumbs_path
+
     return render_template(
         'index.html',
-        thumbs=thumbs,
-        image_name=config_cls.get_value('last_image_name') or thumbs[0]['name'],
-        image_path=config_cls.get_value('last_image_path') or shoujo_cls.get_image(thumbs[0]['name'])
+        thumbs_path=thumbs_path,
+        image_list=image_list,
+        image_name=config_cls.get_value('last_image_name') or image_list[0]['name'],
+        image_path=config_cls.get_value('last_image_path') or shoujo_cls.get_image(image_list[0]['name'])
     )
 
 @app.route('/image/<image_id>')

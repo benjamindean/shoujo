@@ -22,22 +22,22 @@ var loadXMLDoc = function (url, callback) {
     xmlhttp.send();
 };
 
+var processRequest = function(url, id) {
+    if (!id) return;
+    loadXMLDoc(url + encodeURI(id), function (response) {
+            response = JSON.parse(response);
+            var main_image = $('#mainImage')[0];
+            main_image.setAttribute('data-id', response['name']);
+            main_image.setAttribute('src', `file://${response['path']}`);
+            $('body')[0].scrollTop = 0;
+        });
+};
+
 var listenThumbnails = function () {
     $('#thumbnails')[0].addEventListener('click', function (e) {
         e.preventDefault();
-        let id = e.target.getAttribute('id');
-        if (!id) return;
-        loadXMLDoc(`${config.host}/image/` + encodeURI(id), function (response) {
-            var main_image = $('#mainImage')[0];
-            main_image.setAttribute('data-id', id);
-            main_image.setAttribute('src', `file://${response}`);
-            scrollTop();
-        });
+        processRequest(`${config.host}/image/`, e.target.getAttribute('data-id'));
     });
-};
-
-var scrollTop = function () {
-    $('body')[0].scrollTop = 0;
 };
 
 var toggleFullScreen = function (state) {
@@ -48,15 +48,7 @@ var toggleFullScreen = function (state) {
 var listenNextImage = function () {
     $('#mainImage')[0].addEventListener('click', function (e) {
         e.preventDefault();
-        let id = e.target.getAttribute('data-id');
-        if (!id) return;
-        loadXMLDoc(`${config.host}/image/next/` + encodeURI(id), function (response) {
-            response = JSON.parse(response);
-            var main_image = $('#mainImage')[0];
-            main_image.setAttribute('data-id', response['name']);
-            main_image.setAttribute('src', `file://${response['url']}`);
-            scrollTop();
-        });
+        processRequest(`${config.host}/image/next/`, e.target.getAttribute('data-id'));
     });
 };
 

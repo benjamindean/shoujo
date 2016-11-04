@@ -8,10 +8,10 @@
 </head>
 <body>
 <div id="thumbnails">
-    {% for thumb in thumbs %}
+    {% for thumb in image_list %}
     <a href="#" class="thumb-item">
         <div class="thumb-wrapper">
-            <img class="thumb" id="{{ thumb.name }}" src="file:///{{ thumb.url }}"/>
+            <img class="thumb" data-id="{{ thumb.name }}" id="{{ thumb.name }}" src="file:///{{ thumbs_path }}/{{ thumb.name }}"/>
             <span class="thumb-id">{{ thumb.id }}</span>
         </div>
     </a>
