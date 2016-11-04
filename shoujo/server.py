@@ -1,15 +1,16 @@
 import sys
 from flask import Flask, render_template
-from shoujo import shoujo
-from shoujo import config
 
-shoujo_cls = shoujo.Shoujo()
-config_cls = config.Config()
+from classes.config import Config
+from classes.shoujo import Shoujo
+
+shoujo_cls = Shoujo()
+config_cls = Config()
 
 app = Flask(
     __name__,
-    template_folder='assets/html',
-    static_folder='assets'
+    template_folder='public/html',
+    static_folder='public'
 )
 
 @app.route("/<file>")
