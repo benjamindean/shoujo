@@ -46,7 +46,7 @@ var listenThumbnails = function () {
 
 var toggleFullScreen = function (state) {
     $('#thumbnails')[0].style.display = state ? "none" : "block";
-    $('.page-image')[0].style.float = state ? "none" : "right";
+    $('#page')[0].style.width = state ? "100%" : "80%";
 };
 
 var listenNextImage = function () {

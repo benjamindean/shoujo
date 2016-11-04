@@ -42,7 +42,8 @@ app.on('ready', function () {
                 preload: path.join(__dirname, 'shoujo/public/js/browser.js'),
                 nodeIntegration: false,
                 webSecurity: false
-            }
+            },
+            icon: path.join(__dirname, 'shoujo/public/images/icon.png')
         });
         mainWindow.loadURL(mainAddr);
         mainWindow.webContents.openDevTools();
