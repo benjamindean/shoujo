@@ -43,7 +43,7 @@ app.on('ready', function () {
                 nodeIntegration: false,
                 webSecurity: false
             },
-            icon: path.join(__dirname, 'resources/Icon.png')
+            icon: path.join(__dirname, 'resources/icons/icon.png')
         });
         mainWindow.loadURL(mainAddr);
         //mainWindow.webContents.openDevTools();

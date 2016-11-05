@@ -13,7 +13,7 @@
     "start": "electron . test.zip",
     "build": "npm run build:linux && npm run deb64",
     "build:linux": "electron-packager . --overwrite --out=dist --prune --platform=linux --arch=x64 --app-bundle-id=com.benjaminabel.shoujo --app-version=$npm_package_version",
-    "deb64": "electron-installer-debian --src dist/$npm_package_name-linux-x64/ --dest dist/installers/ --arch amd64"
+    "deb64": "electron-installer-debian --src dist/$npm_package_name-linux-x64/ --arch amd64 --config configs/deb.json"
   },
   "dependencies": {
     "electron": "*",
