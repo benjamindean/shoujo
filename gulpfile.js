@@ -4,7 +4,7 @@ var gulp = require('gulp'),
     sass = require('gulp-sass');
 
 gulp.task('css', function () {
-    gulp.src('shoujo/public/css/*.scss')
+    gulp.src('resources/scss/partials/*.scss')
         .pipe(sass())
         .pipe(cssmin())
         .pipe(rename({suffix: '.min'}))
@@ -12,5 +12,6 @@ gulp.task('css', function () {
 });
 
 gulp.task('default', ['css'], function () {
-    gulp.watch('shoujo/public/css/partials/*.scss', ['css']);
+    gulp.watch('resources/scss/*.scss', ['css']);
+    gulp.watch('resources/scss/partials/*.scss', ['css']);
 });
