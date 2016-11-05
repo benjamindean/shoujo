@@ -17,15 +17,11 @@ app = Flask(
 def hello():
     file = request.args.get('file')
     shoujo_cls.extract_file(file)
-    shoujo_cls.generate_thumbs(file)
-
-    image_list = shoujo_cls.image_list
-    thumbs_path = shoujo_cls.thumbs_path
 
     return render_template(
         'index.html',
-        thumbs_path=thumbs_path,
-        image_list=image_list,
+        thumbs_path=shoujo_cls.origin_path,
+        image_list=shoujo_cls.image_list,
         image_name=config_cls.get_value('last_image_name') or image_list[0]['name'],
         image_path=config_cls.get_value('last_image_path') or shoujo_cls.get_image(image_list[0]['name'])
     )
