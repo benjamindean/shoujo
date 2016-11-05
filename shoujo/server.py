@@ -1,4 +1,6 @@
 import sys
+import threading
+
 from flask import Flask, render_template, request
 
 from classes.config import Config
@@ -16,12 +18,13 @@ app = Flask(
 @app.route("/")
 def hello():
     file = request.args.get('file')
-    shoujo_cls.extract_file(file)
+    threading.Thread(target=shoujo_cls.extract_file, args=(file,)).start()
+    image_list = shoujo_cls.image_list
 
     return render_template(
         'index.html',
         thumbs_path=shoujo_cls.origin_path,
-        image_list=shoujo_cls.image_list,
+        image_list=image_list,
         image_name=config_cls.get_value('last_image_name') or image_list[0]['name'],
         image_path=config_cls.get_value('last_image_path') or shoujo_cls.get_image(image_list[0]['name'])
     )
