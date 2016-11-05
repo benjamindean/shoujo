@@ -4,7 +4,7 @@ var gulp = require('gulp'),
     sass = require('gulp-sass');
 
 gulp.task('css', function () {
-    gulp.src('resources/scss/partials/*.scss')
+    gulp.src('resources/scss/*.scss')
         .pipe(sass())
         .pipe(cssmin())
         .pipe(rename({suffix: '.min'}))
