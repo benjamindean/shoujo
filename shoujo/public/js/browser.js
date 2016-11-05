@@ -46,6 +46,7 @@ var listenThumbnails = function () {
 
 var pageWidth = 0;
 var toggleFullScreen = function (state) {
+    $('#toolbar')[0].style.display = state ? "none" : "flex";
     $('#thumbnails')[0].style.display = state ? "none" : "block";
     $('#page')[0].style.width = state ? "100%" : pageWidth;
 };
