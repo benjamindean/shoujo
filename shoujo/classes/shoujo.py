@@ -35,7 +35,7 @@ class Shoujo():
                 )
 
                 source = zip_file.open(member)
-                target = open(os.path.join(self.origin_path, filename), "wb")
+                target = open(os.path.join(self.origin_path, filename), "w")
                 with source, target:
                     shutil.copyfileobj(source, target)
 
