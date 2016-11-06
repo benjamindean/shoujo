@@ -39,6 +39,16 @@ class Shoujo():
                 with source, target:
                     shutil.copyfileobj(source, target)
 
+    def get_image_list(self):
+        for idx, filename in enumerate(sorted(os.listdir(self.origin_path))):
+            self.image_list.append(
+                {
+                    'id': idx,
+                    'name': filename
+                }
+            )
+        return self.image_list
+
     def generate_thumbs(self, file):
         if os.listdir(self.thumbs_path) != []: return
         for directory, subdirectories, files in os.walk(self.origin_path):

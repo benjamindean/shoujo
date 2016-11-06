@@ -46,7 +46,7 @@ app.on('ready', function () {
             icon: path.join(__dirname, 'resources/icons/icon.png')
         });
         mainWindow.loadURL(mainAddr);
-        //mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
         electron.Menu.setApplicationMenu(appMenu);
 
         mainWindow.on('closed', function () {
