@@ -1,0 +1,19 @@
+{
+  "name": "Shoujo",
+  "description": "Manga and comic book reader",
+  "main": "main.js",
+  "license": "MIT",
+  "homepage": "https://github.com/benjamindean/shoujo",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "resources/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize-css": "normalize.css#^5.0.0"
+  }
+}

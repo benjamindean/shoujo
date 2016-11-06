@@ -11,7 +11,14 @@ gulp.task('css', function () {
         .pipe(gulp.dest('shoujo/public/css/'));
 });
 
-gulp.task('default', ['css'], function () {
+gulp.task('components', function () {
+    gulp.src('resources/components/normalize-css/normalize.css')
+        .pipe(cssmin())
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest('shoujo/public/css/'));
+});
+
+gulp.task('default', ['css', 'components'], function () {
     gulp.watch('resources/scss/*.scss', ['css']);
     gulp.watch('resources/scss/partials/*.scss', ['css']);
 });
