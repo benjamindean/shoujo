@@ -5,7 +5,7 @@ const ipcRenderer = electron.ipcRenderer;
 const $ = document.querySelectorAll.bind(document);
 const Config = require('electron-config');
 const config = new Config();
-const Vue = require('vue');
+const Vue = require('vue/dist/vue.js');
 
 var loadXMLDoc = function (url, callback) {
     var xmlhttp = new XMLHttpRequest();
