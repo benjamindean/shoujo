@@ -6,6 +6,8 @@ const $ = document.querySelectorAll.bind(document);
 const Config = require('electron-config');
 const config = new Config();
 const Vue = require('vue/dist/vue.js');
+const VueResource = require('vue-resource');
+Vue.use(VueResource);
 
 var loadXMLDoc = function (url, callback) {
     var xmlhttp = new XMLHttpRequest();
@@ -25,17 +27,17 @@ var loadXMLDoc = function (url, callback) {
     xmlhttp.send();
 };
 
-var processRequest = function(url, id) {
+var processRequest = function (url, id) {
     if (!id) return;
     loadXMLDoc(url + encodeURI(id), function (response) {
-            response = JSON.parse(response);
-            var main_image = $('#mainImage')[0];
-            main_image.setAttribute('data-id', response['name']);
-            main_image.setAttribute('src', `file://${response['path']}`);
-            config.set('last_image_name', response['name']);
-            config.set('last_image_path', response['path']);
-            $('body')[0].scrollTop = 0;
-        });
+        response = JSON.parse(response);
+        var main_image = $('#mainImage')[0];
+        main_image.setAttribute('data-id', response['name']);
+        main_image.setAttribute('src', `file://${response['path']}`);
+        config.set('last_image_name', response['name']);
+        config.set('last_image_path', response['path']);
+        $('body')[0].scrollTop = 0;
+    });
 };
 
 var listenThumbnails = function () {
@@ -59,10 +61,31 @@ var listenNextImage = function () {
     });
 };
 
-elementReady('#mainImage').then(function () {
+elementReady('#shoujo').then(function () {
     pageWidth = $('#page')[0].style.width;
     listenThumbnails();
     listenNextImage();
+
+    var v = new Vue({
+        el: '#shoujo',
+        data: {
+            thumbnails: []
+        },
+        ready: function () {
+            this.fetchMessages();
+        },
+        methods: {
+            fetchMessages: function () {
+                this.$http.get('/list').then((response) => {
+                    this.thumbnails = response.body;
+                  }, (response) => {
+                    console.log(response);
+                  });
+            }
+        }
+    });
+
+    v.fetchMessages();
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {

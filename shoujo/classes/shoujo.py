@@ -1,9 +1,9 @@
-import shutil
 import atexit
 import json
 import os
-
+import shutil
 from zipfile import ZipFile
+
 from PIL import Image
 
 
@@ -47,7 +47,7 @@ class Shoujo():
                     'name': filename
                 }
             )
-        return self.image_list
+        return json.dumps(self.image_list)
 
     def generate_thumbs(self, file):
         if os.listdir(self.thumbs_path) != []: return
