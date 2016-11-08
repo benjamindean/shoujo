@@ -9,56 +9,11 @@ const Vue = require('vue/dist/vue.js');
 const VueResource = require('vue-resource');
 Vue.use(VueResource);
 
-var loadXMLDoc = function (url, callback) {
-    var xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == XMLHttpRequest.DONE) {
-            if (xmlhttp.status == 200) {
-                callback(xmlhttp.responseText);
-            }
-            else {
-                console.log(xmlhttp.status);
-            }
-        }
-    };
-
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-};
-
-var processRequest = function (url, id) {
-    if (!id) return;
-    loadXMLDoc(url + encodeURI(id), function (response) {
-        response = JSON.parse(response);
-        var main_image = $('#mainImage')[0];
-        main_image.setAttribute('data-id', response['name']);
-        main_image.setAttribute('src', `file://${response['path']}`);
-        config.set('last_image_name', response['name']);
-        config.set('last_image_path', response['path']);
-        $('body')[0].scrollTop = 0;
-    });
-};
-
-var listenThumbnails = function () {
-    $('#thumbnails')[0].addEventListener('click', function (e) {
-        e.preventDefault();
-        processRequest(`${globalConfig.host}/image/`, e.target.getAttribute('data-id'));
-    });
-};
-
 var pageWidth = 0;
 var toggleFullScreen = function (state) {
     $('#toolbar')[0].style.display = state ? "none" : "flex";
     $('#thumbnails')[0].style.display = state ? "none" : "block";
     $('#page')[0].style.width = state ? "100%" : pageWidth;
-};
-
-var listenNextImage = function () {
-    $('#mainImage')[0].addEventListener('click', function (e) {
-        e.preventDefault();
-        processRequest(`${globalConfig.host}/image/next/`, e.target.getAttribute('data-id'));
-    });
 };
 
 elementReady('#shoujo').then(function () {
@@ -73,6 +28,20 @@ elementReady('#shoujo').then(function () {
             last_image_path: config.get('last_image_path')
         },
         methods: {
+            processRequest: function (url, id) {
+                if (!id) return;
+                this.$http.get(url + encodeURI(id)).then((response) => {
+                    response = JSON.parse(response.body);
+                    var main_image = $('#mainImage')[0];
+                    main_image.setAttribute('data-id', response.name);
+                    main_image.setAttribute('src', `file://${response.path}`);
+                    config.set('last_image_name', response.name);
+                    config.set('last_image_path', response.path);
+                    $('body')[0].scrollTop = 0;
+                }, (response) => {
+                    console.log(response);
+                });
+            },
             fetchMessages: function () {
                 this.$http.get('/list').then((response) => {
                     this.thumbnails = response.body;
@@ -86,6 +55,14 @@ elementReady('#shoujo').then(function () {
                 }, (response) => {
                     console.log(response);
                 });
+            },
+            onClickThumb: function (e) {
+                e.preventDefault();
+                this.processRequest(`${globalConfig.host}/image/`, e.target.getAttribute('data-id'));
+            },
+            onClickImage: function (e) {
+                e.preventDefault();
+                this.processRequest(`${globalConfig.host}/image/next/`, e.target.getAttribute('data-id'));
             }
         }
     });
@@ -93,8 +70,6 @@ elementReady('#shoujo').then(function () {
     v.getImagePath();
     v.fetchMessages();
 
-    listenThumbnails();
-    listenNextImage();
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {
