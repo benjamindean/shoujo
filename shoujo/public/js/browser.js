@@ -63,14 +63,14 @@ var listenNextImage = function () {
 
 elementReady('#shoujo').then(function () {
     pageWidth = $('#page')[0].style.width;
-    listenThumbnails();
-    listenNextImage();
 
     var v = new Vue({
         el: '#shoujo',
         data: {
             thumbnails: [],
-            image_path: ''
+            image_path: '',
+            last_image_name: config.get('last_image_name'),
+            last_image_path: config.get('last_image_path')
         },
         methods: {
             fetchMessages: function () {
@@ -92,6 +92,9 @@ elementReady('#shoujo').then(function () {
 
     v.getImagePath();
     v.fetchMessages();
+
+    listenThumbnails();
+    listenNextImage();
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {
