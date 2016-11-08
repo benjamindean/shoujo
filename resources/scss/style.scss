@@ -14,7 +14,14 @@ html, body {
   min-height: 100%;
   font-family: $font-family;
   overflow: overlay;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 #shoujo {
   min-height: 100%;
   display: inline;
