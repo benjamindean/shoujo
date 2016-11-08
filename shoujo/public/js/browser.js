@@ -12,16 +12,12 @@ const VueResource = require('vue-resource');
 Vue.use(VueResource);
 
 var pageWidth = 0;
-var toggleFullScreen = function (state) {
-    $('#toolbar')[0].style.display = state ? "none" : "flex";
-    $('#thumbnails')[0].style.display = state ? "none" : "block";
-    $('#page')[0].style.width = state ? "100%" : pageWidth;
-};
+var vm = null;
 
 elementReady('#shoujo').then(function () {
     pageWidth = $('#page')[0].style.width;
 
-    var v = new Vue({
+    vm = new Vue({
         el: '#shoujo',
         data: {
             thumbnails: [],
@@ -63,15 +59,20 @@ elementReady('#shoujo').then(function () {
             },
             onClickImage: function (e) {
                 this.processRequest(`${globalConfig.host}/image/next/`, e.target.getAttribute('data-id'));
+            },
+            toggleFullScreen: function (state) {
+                $('#toolbar')[0].style.display = state ? "none" : "flex";
+                $('#thumbnails')[0].style.display = state ? "none" : "block";
+                $('#page')[0].style.width = state ? "100%" : pageWidth;
             }
         }
     });
 
-    v.getImagePath();
-    v.fetchMessages();
+    vm.getImagePath();
+    vm.fetchMessages();
 
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {
-    toggleFullScreen(state);
+    vm.toggleFullScreen(state);
 });

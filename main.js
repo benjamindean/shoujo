@@ -7,11 +7,10 @@ const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
 const appMenu = require('./shoujo/public/js/menu');
 const config = require('./shoujo/public/js/config');
-var rq = null;
-
-var mainWindow = null;
-
 const file = process.argv[2] || process.argv[1];
+
+var rq = null;
+var mainWindow = null;
 
 const instanceRunning = app.makeSingleInstance(() => {
     if (mainWindow) {
