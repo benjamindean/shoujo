@@ -23,7 +23,8 @@ elementReady('#shoujo').then(function () {
             thumbnails: [],
             image_path: '',
             last_image_name: config.get('last_image_name'),
-            last_image_path: config.get('last_image_path')
+            last_image_path: config.get('last_image_path'),
+            active_image: config.get('last_image_name')
         },
         methods: {
             processRequest: function (url, id) {
@@ -31,7 +32,7 @@ elementReady('#shoujo').then(function () {
                 this.$http.get(url + encodeURI(id)).then((response) => {
                     response = JSON.parse(response.body);
                     var main_image = $('#mainImage')[0];
-                    main_image.setAttribute('data-id', response.name);
+                    main_image.setAttribute('data-name', response.name);
                     main_image.setAttribute('src', `file://${response.path}`);
                     config.set('last_image_name', response.name);
                     config.set('last_image_path', response.path);
@@ -55,10 +56,14 @@ elementReady('#shoujo').then(function () {
                 });
             },
             onClickThumb: function (e) {
-                this.processRequest(`${globalConfig.host}/image/`, e.target.getAttribute('data-id'));
+                let id = e.target.getAttribute('data-name');
+                this.active_image = id;
+                this.processRequest(`${globalConfig.host}/image/`, id);
             },
             onClickImage: function (e) {
-                this.processRequest(`${globalConfig.host}/image/next/`, e.target.getAttribute('data-id'));
+                let id = e.target.getAttribute('data-name');
+                this.active_image = id;
+                this.processRequest(`${globalConfig.host}/image/next/`, id);
             },
             toggleFullScreen: function (state) {
                 $('#toolbar')[0].style.display = state ? "none" : "flex";

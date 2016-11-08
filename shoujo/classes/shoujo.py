@@ -27,13 +27,6 @@ class Shoujo():
                 if not filename:
                     continue
 
-                self.image_list.append(
-                    {
-                        'id': idx,
-                        'name': filename
-                    }
-                )
-
                 source = zip_file.open(member)
                 target = open(os.path.join(self.origin_path, filename), "w")
                 with source, target:
@@ -77,11 +70,13 @@ class Shoujo():
         for id, image in enumerate(self.image_list):
             if id == len(self.image_list) - 1:
                 return json.dumps({
+                    'id': id,
                     'name': 'The End',
                     'path': False
                 })
             if image['name'] == image_id:
                 return json.dumps({
+                    'id': id,
                     'name': self.image_list[id + 1]['name'],
                     'path': os.path.join(self.origin_path, self.image_list[id + 1]['name'])
                 })
