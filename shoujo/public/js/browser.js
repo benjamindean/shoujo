@@ -57,11 +57,9 @@ elementReady('#shoujo').then(function () {
                 });
             },
             onClickThumb: function (e) {
-                e.preventDefault();
                 this.processRequest(`${globalConfig.host}/image/`, e.target.getAttribute('data-id'));
             },
             onClickImage: function (e) {
-                e.preventDefault();
                 this.processRequest(`${globalConfig.host}/image/next/`, e.target.getAttribute('data-id'));
             }
         }

@@ -8,7 +8,7 @@
 </head>
 <body>
 <div id="shoujo">
-    <div id="thumbnails" v-on:click="onClickThumb">
+    <div id="thumbnails" v-on:click.prevent="onClickThumb">
         <a v-for="thumb in thumbnails" href="#" class="thumb-item">
             <div class="thumb-wrapper">
                 <img class="thumb" :data-id="thumb.name" :id="thumb.name"
@@ -56,7 +56,7 @@
 
         </div>
         <div class="image-container">
-            <img v-on:click="onClickImage" class="page-image fit-width" id="mainImage" :src="'file:///' + last_image_path" :data-id="last_image_name"/>
+            <img v-on:click.prevent="onClickImage" class="page-image fit-width" id="mainImage" :src="'file:///' + last_image_path" :data-id="last_image_name"/>
         </div>
     </div>
     <div id="clearfix"></div>
