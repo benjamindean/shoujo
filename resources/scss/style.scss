@@ -13,9 +13,9 @@ html, body {
   min-width: 100%;
   min-height: 100%;
   font-family: $font-family;
-  overflow: overlay;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
 *, *::before, *::after {

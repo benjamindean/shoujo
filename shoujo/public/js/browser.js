@@ -35,7 +35,7 @@ elementReady('#shoujo').then(function () {
                     main_image.setAttribute('src', `file://${response.path}`);
                     config.set('last_image_name', response.name);
                     config.set('last_image_path', response.path);
-                    $('body')[0].scrollTop = 0;
+                    $('#page')[0].scrollTop = 0;
                 }, (response) => {
                     console.log(response);
                 });
