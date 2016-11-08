@@ -1,5 +1,4 @@
 #thumbnails {
-  padding-top: 20px;
   overflow-y: overlay;
   overflow-x: hidden;
   position: fixed;
@@ -8,19 +7,25 @@
   border-right: 1px solid $main_color;
   float: left;
   z-index: 10;
+  :first-child {
+      margin-top: 20px;
+    }
   .thumb {
     max-width: 100%;
     max-height: 100%;
     border: 1px solid $main_color;
   }
   a {
-    margin: 0 20px 20px;
     display: flex;
     position: relative;
+
     .thumb-wrapper {
       position: relative;
       display: inline-block;
-      margin: 0 auto;
+      margin: 0 20px 20px;
+      img {
+        margin: 0;
+      }
       .thumb-id {
         position: absolute;
         bottom: 15px;
