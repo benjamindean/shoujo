@@ -1,3 +1,5 @@
+'use strict';
+
 const electron = require('electron');
 const elementReady = require('element-ready');
 const globalConfig = require('./config');
