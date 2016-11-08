@@ -69,22 +69,28 @@ elementReady('#shoujo').then(function () {
     var v = new Vue({
         el: '#shoujo',
         data: {
-            thumbnails: []
-        },
-        ready: function () {
-            this.fetchMessages();
+            thumbnails: [],
+            image_path: ''
         },
         methods: {
             fetchMessages: function () {
                 this.$http.get('/list').then((response) => {
                     this.thumbnails = response.body;
-                  }, (response) => {
+                }, (response) => {
                     console.log(response);
-                  });
+                });
+            },
+            getImagePath: function () {
+                this.$http.get('/get-image-path').then((response) => {
+                    this.image_path = response.body;
+                }, (response) => {
+                    console.log(response);
+                });
             }
         }
     });
 
+    v.getImagePath();
     v.fetchMessages();
 });
 

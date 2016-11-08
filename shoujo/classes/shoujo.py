@@ -40,6 +40,7 @@ class Shoujo():
                     shutil.copyfileobj(source, target)
 
     def get_image_list(self):
+        if len(self.image_list): return json.dumps(self.image_list)
         for idx, filename in enumerate(sorted(os.listdir(self.origin_path))):
             self.image_list.append(
                 {

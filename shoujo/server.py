@@ -33,6 +33,11 @@ def get_image_list():
                     mimetype="application/json")
 
 
+@app.route('/get-image-path')
+def get_image_path():
+    return shoujo_cls.origin_path
+
+
 @app.route('/image/next/<image_id>')
 def get_next_image(image_id):
     return shoujo_cls.get_next_image(image_id)
