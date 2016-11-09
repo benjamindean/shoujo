@@ -32,7 +32,6 @@ elementReady('#shoujo').then(function () {
                 if (!id) return;
                 this.$http.get(url + encodeURI(id)).then((response) => {
                     response = JSON.parse(response.body);
-                    console.log(response);
                     var main_image = $('#mainImage')[0];
                     main_image.setAttribute('data-id', response.id);
                     main_image.setAttribute('data-name', response.name);

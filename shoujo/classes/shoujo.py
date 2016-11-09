@@ -10,6 +10,7 @@ from PIL import Image
 class Shoujo():
     def __init__(self):
         self.image_list = list()
+        self.image_list_size = None
         self.filename = None
         self.volume_path = None
         self.origin_path = None
@@ -41,6 +42,7 @@ class Shoujo():
                     'name': filename
                 }
             )
+        self.image_list_size = len(self.image_list) - 1
         return json.dumps(self.image_list)
 
     def generate_thumbs(self, file):
@@ -68,18 +70,12 @@ class Shoujo():
         })
 
     def get_next_image(self, image_id):
-        if image_id == len(self.image_list) - 1:
-            return json.dumps({
-                'id': id,
-                'name': 'The End',
-                'path': False
-            })
-        else:
-            return json.dumps({
-                'id': image_id + 1,
-                'name': self.image_list[image_id + 1]['name'],
-                'path': os.path.join(self.origin_path, self.image_list[image_id + 1]['name'])
-            })
+        request_id = image_id if image_id == self.image_list_size else image_id + 1
+        return json.dumps({
+            'id': request_id,
+            'name': self.image_list[request_id]['name'],
+            'path': os.path.join(self.origin_path, self.image_list[request_id]['name'])
+        })
 
     def clear_cache(self):
         shutil.rmtree(self.volume_path)
