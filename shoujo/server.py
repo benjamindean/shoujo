@@ -1,9 +1,9 @@
 import sys
 import threading
+from flask import Flask, Response, request
 
 from classes.config import Config
 from classes.shoujo import Shoujo
-from flask import Flask, Response, request
 
 shoujo_cls = Shoujo()
 config_cls = Config()
@@ -14,6 +14,7 @@ app = Flask(
     static_folder='public'
 )
 
+
 @app.route("/")
 def hello():
     file = request.args.get('file')
@@ -21,7 +22,7 @@ def hello():
     return app.send_static_file('html/index.html')
 
 
-@app.route('/image/<image_id>')
+@app.route('/image/<int:image_id>')
 def get_image(image_id):
     return shoujo_cls.get_image(image_id)
 
@@ -38,7 +39,7 @@ def get_image_path():
     return shoujo_cls.origin_path
 
 
-@app.route('/image/next/<image_id>')
+@app.route('/image/next/<int:image_id>')
 def get_next_image(image_id):
     return shoujo_cls.get_next_image(image_id)
 

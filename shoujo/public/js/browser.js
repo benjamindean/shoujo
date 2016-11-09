@@ -22,6 +22,7 @@ elementReady('#shoujo').then(function () {
         data: {
             thumbnails: [],
             image_path: '',
+            last_image_id: config.get('last_image_id') || 0,
             last_image_name: config.get('last_image_name'),
             last_image_path: config.get('last_image_path'),
             active_image: config.get('last_image_name')
@@ -31,9 +32,12 @@ elementReady('#shoujo').then(function () {
                 if (!id) return;
                 this.$http.get(url + encodeURI(id)).then((response) => {
                     response = JSON.parse(response.body);
+                    console.log(response);
                     var main_image = $('#mainImage')[0];
+                    main_image.setAttribute('data-id', response.id);
                     main_image.setAttribute('data-name', response.name);
                     main_image.setAttribute('src', `file://${response.path}`);
+                    config.set('last_image_id', response.id);
                     config.set('last_image_name', response.name);
                     config.set('last_image_path', response.path);
                     $('#page')[0].scrollTop = 0;
@@ -41,7 +45,7 @@ elementReady('#shoujo').then(function () {
                     console.log(response);
                 });
             },
-            fetchMessages: function () {
+            fetchThumbnails: function () {
                 this.$http.get('/list').then((response) => {
                     this.thumbnails = response.body;
                 }, (response) => {
@@ -56,13 +60,13 @@ elementReady('#shoujo').then(function () {
                 });
             },
             onClickThumb: function (e) {
-                let id = e.target.getAttribute('data-name');
+                let id = e.target.getAttribute('data-id');
                 this.active_image = id;
                 this.processRequest(`${globalConfig.host}/image/`, id);
             },
             onClickImage: function (e) {
-                let id = e.target.getAttribute('data-name');
-                this.active_image = id;
+                let id = e.target.getAttribute('data-id');
+                this.active_image++;
                 this.processRequest(`${globalConfig.host}/image/next/`, id);
             },
             toggleFullScreen: function (state) {
@@ -74,7 +78,7 @@ elementReady('#shoujo').then(function () {
     });
 
     vm.getImagePath();
-    vm.fetchMessages();
+    vm.fetchThumbnails();
 
 });
 

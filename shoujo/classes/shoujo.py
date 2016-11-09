@@ -60,26 +60,26 @@ class Shoujo():
         if not os.path.isdir(self.origin_path): os.mkdir(self.origin_path)
         if not os.path.isdir(self.thumbs_path): os.mkdir(self.thumbs_path)
 
-    def get_image(self, image_name):
+    def get_image(self, image_id):
         return json.dumps({
-            'name': image_name,
-            'path': os.path.join(self.origin_path, image_name)
+            'id': image_id,
+            'name': self.image_list[image_id]['name'],
+            'path': os.path.join(self.origin_path, self.image_list[image_id]['name'])
         })
 
     def get_next_image(self, image_id):
-        for id, image in enumerate(self.image_list):
-            if id == len(self.image_list) - 1:
-                return json.dumps({
-                    'id': id,
-                    'name': 'The End',
-                    'path': False
-                })
-            if image['name'] == image_id:
-                return json.dumps({
-                    'id': id,
-                    'name': self.image_list[id + 1]['name'],
-                    'path': os.path.join(self.origin_path, self.image_list[id + 1]['name'])
-                })
+        if image_id == len(self.image_list) - 1:
+            return json.dumps({
+                'id': id,
+                'name': 'The End',
+                'path': False
+            })
+        else:
+            return json.dumps({
+                'id': image_id + 1,
+                'name': self.image_list[image_id + 1]['name'],
+                'path': os.path.join(self.origin_path, self.image_list[image_id + 1]['name'])
+            })
 
     def clear_cache(self):
         shutil.rmtree(self.volume_path)
