@@ -22,10 +22,12 @@ elementReady('#shoujo').then(function () {
         data: {
             thumbnails: [],
             image_path: '',
-            last_image_id: config.get('last_image_id') || 0,
-            last_image_name: config.get('last_image_name'),
-            last_image_path: config.get('last_image_path'),
-            active_image: config.get('last_image_name')
+            last_image: {
+                id: config.get('last_image_id') || 0,
+                name: config.get('last_image_name'),
+                path: config.get('last_image_path')
+            },
+            active_image: config.get('last_image_id')
         },
         methods: {
             processRequest: function (url, id) {
@@ -36,9 +38,9 @@ elementReady('#shoujo').then(function () {
                     main_image.setAttribute('data-id', response.id);
                     main_image.setAttribute('data-name', response.name);
                     main_image.setAttribute('src', `file://${response.path}`);
-                    config.set('last_image_id', response.id);
-                    config.set('last_image_name', response.name);
-                    config.set('last_image_path', response.path);
+                    config.set('last_image.id', response.id);
+                    config.set('last_image.name', response.name);
+                    config.set('last_image.path', response.path);
                     $('#page')[0].scrollTop = 0;
                 }, (response) => {
                     console.log(response);
