@@ -7,6 +7,7 @@ const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
 const appMenu = require('./shoujo/public/js/menu');
 const config = require('./shoujo/public/js/config');
+const contextMenu = require('./shoujo/public/js/context-menu');
 const file = process.argv[2] || process.argv[1];
 
 var rq = null;
@@ -62,6 +63,8 @@ app.on('ready', function () {
         mainWindow.on('leave-full-screen', function () {
             this.webContents.send('toggle-full-screen', false);
         });
+
+        contextMenu();
 
     };
 
