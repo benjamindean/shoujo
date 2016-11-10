@@ -1,10 +1,7 @@
 'use strict';
 
-const electron = require('electron');
-const app = electron.app;
+const {Menu, BrowserWindow, ipcMain, ipcRenderer, app, electron, dialog} = require('electron');
 const path = require('path');
-const ipcMain = electron.ipcMain;
-const BrowserWindow = electron.BrowserWindow;
 const appMenu = require('./shoujo/public/js/menu');
 const config = require('./shoujo/public/js/config');
 const contextMenu = require('./shoujo/public/js/context-menu');
@@ -49,7 +46,7 @@ app.on('ready', function () {
         });
         mainWindow.loadURL(mainAddr);
         mainWindow.webContents.openDevTools();
-        electron.Menu.setApplicationMenu(appMenu);
+        Menu.setApplicationMenu(appMenu);
 
         mainWindow.on('closed', function () {
             mainWindow = null;
@@ -62,6 +59,16 @@ app.on('ready', function () {
 
         mainWindow.on('leave-full-screen', function () {
             this.webContents.send('toggle-full-screen', false);
+        });
+
+        process.on('open-file', function () {
+            dialog.showOpenDialog({
+                title: 'Open File',
+                properties: ['openFile'],
+                filters: [
+                    {name: 'Archives', extensions: ['zip']},
+                ]
+            });
         });
 
         contextMenu();
