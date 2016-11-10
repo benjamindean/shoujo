@@ -30,18 +30,20 @@ elementReady('#shoujo').then(function () {
             active_image: config.get('last_image_id')
         },
         methods: {
+            handleAttributes: function (response) {
+                let main_image = $('#mainImage')[0];
+                main_image.setAttribute('data-id', response.id);
+                main_image.setAttribute('data-name', response.name);
+                main_image.setAttribute('src', `file://${response.path}`);
+                config.set('last_image.id', response.id);
+                config.set('last_image.name', response.name);
+                config.set('last_image.path', response.path);
+                $('#page')[0].scrollTop = 0;
+            },
             processRequest: function (url, id) {
                 if (!id) return;
                 this.$http.get(url + encodeURI(id)).then((response) => {
-                    response = JSON.parse(response.body);
-                    var main_image = $('#mainImage')[0];
-                    main_image.setAttribute('data-id', response.id);
-                    main_image.setAttribute('data-name', response.name);
-                    main_image.setAttribute('src', `file://${response.path}`);
-                    config.set('last_image.id', response.id);
-                    config.set('last_image.name', response.name);
-                    config.set('last_image.path', response.path);
-                    $('#page')[0].scrollTop = 0;
+                    this.handleAttributes(JSON.parse(response.body));
                 }, (response) => {
                     console.log(response);
                 });
@@ -62,13 +64,13 @@ elementReady('#shoujo').then(function () {
             },
             onClickThumb: function (e) {
                 let id = e.target.getAttribute('data-id');
-                this.active_image = id;
                 this.processRequest(`${globalConfig.host}/image/`, id);
+                this.active_image = id;
             },
             onClickImage: function (e) {
                 let id = e.target.getAttribute('data-id');
-                this.active_image++;
                 this.processRequest(`${globalConfig.host}/image/next/`, id);
+                this.active_image++;
             },
             toggleFullScreen: function (state) {
                 $('#toolbar')[0].style.display = state ? "none" : "flex";
