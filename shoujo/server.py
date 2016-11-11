@@ -18,7 +18,7 @@ app = Flask(
 @app.route("/")
 def hello():
     file = request.args.get('file')
-    threading.Thread(target=shoujo_cls.extract_file, args=(file,)).start()
+    if file: threading.Thread(target=shoujo_cls.extract_file, args=(file,)).start()
     return app.send_static_file('html/index.html')
 
 
@@ -39,6 +39,12 @@ def get_image_list():
 @app.route('/get-image-path')
 def get_image_path():
     return shoujo_cls.origin_path
+
+
+@app.route('/reset')
+def reset():
+    shoujo_cls.reset()
+    return ('', 204)
 
 
 @app.route('/image/next/<int:image_id>')
