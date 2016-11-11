@@ -78,4 +78,8 @@ class Shoujo():
         })
 
     def clear_cache(self):
-        shutil.rmtree(self.volume_path)
+        if(self.volume_path): shutil.rmtree(self.volume_path)
+
+    def reset(self):
+        self.clear_cache()
+        self.__init__()

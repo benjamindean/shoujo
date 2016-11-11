@@ -13,6 +13,7 @@ Vue.use(VueResource);
 
 var pageWidth = 0;
 var vm = null;
+const file = process.argv[2] || process.argv[1];
 
 elementReady('#shoujo').then(function () {
     pageWidth = $('#page')[0].style.width;
@@ -59,8 +60,16 @@ elementReady('#shoujo').then(function () {
                     console.log(response);
                 });
             },
+            reset: function () {
+                this.$http.get('/reset').then((response) => {
+                    console.log(response);
+                }, (response) => {
+                    console.log(response);
+                });
+            },
             loadFile: function (file) {
-                this.$http.get('/', {file: file}).then((response) => {
+                this.reset();
+                this.$http.get('/?file=' + file).then((response) => {
                     this.init();
                 }, (response) => {
                     console.log(response);
@@ -95,8 +104,8 @@ elementReady('#shoujo').then(function () {
 
 });
 
-ipcRenderer.on('load-file', function (event, data) {
-    console.log(data);
+ipcRenderer.on('load-file', function (event, file) {
+    vm.loadFile(file);
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {
