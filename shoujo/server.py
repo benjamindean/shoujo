@@ -24,7 +24,9 @@ def hello():
 
 @app.route('/image/<int:image_id>')
 def get_image(image_id):
-    return shoujo_cls.get_image(image_id)
+    return Response(response=shoujo_cls.get_image(image_id),
+                    status=200,
+                    mimetype="application/json")
 
 
 @app.route('/list')
@@ -41,7 +43,9 @@ def get_image_path():
 
 @app.route('/image/next/<int:image_id>')
 def get_next_image(image_id):
-    return shoujo_cls.get_next_image(image_id)
+    return Response(response=shoujo_cls.get_next_image(image_id),
+                    status=200,
+                    mimetype="application/json")
 
 
 if __name__ == "__main__":

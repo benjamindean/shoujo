@@ -43,7 +43,7 @@ elementReady('#shoujo').then(function () {
             processRequest: function (url, id) {
                 if (!id) return;
                 this.$http.get(url + encodeURI(id)).then((response) => {
-                    this.handleAttributes(JSON.parse(response.body));
+                    this.handleAttributes(response.body);
                 }, (response) => {
                     console.log(response);
                 });
