@@ -38,7 +38,7 @@ def get_image_list():
 
 @app.route('/get-image-path')
 def get_image_path():
-    return shoujo_cls.origin_path
+    return shoujo_cls.volume_path
 
 
 @app.route('/reset')

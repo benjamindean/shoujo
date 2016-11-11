@@ -24,11 +24,11 @@ elementReady('#shoujo').then(function () {
             thumbnails: [],
             image_path: '',
             last_image: {
-                id: config.get('last_image_id') || 0,
-                name: config.get('last_image_name'),
-                path: config.get('last_image_path')
+                id: config.get('last_image.id') || 0,
+                name: config.get('last_image.name'),
+                path: config.get('last_image.path')
             },
-            active_image: config.get('last_image_id')
+            active_image: config.get('last_image.id')
         },
         methods: {
             init: function() {
