@@ -4,5 +4,6 @@ venv
 *.pyc
 *.log
 test.zip
+test2.zip
 .idea/
 dist/
