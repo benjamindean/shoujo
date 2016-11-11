@@ -55,8 +55,8 @@
 
         </div>
         <div class="image-container">
-            <img v-on:click.prevent="onClickImage" class="page-image fit-width" id="mainImage"
-                 :src="'file:///' + last_image.path" :data-name="last_image.name" :data-id="last_image.id"/>
+            <img v-if="thumbnails[last_image]" v-on:click.prevent="onClickImage" class="page-image fit-width" id="mainImage"
+                 :src="'file:///' + image_path  + '/' + thumbnails[last_image].name" :data-name="thumbnails[last_image].name" :data-id="last_image"/>
         </div>
     </div>
     <div id="clearfix"></div>

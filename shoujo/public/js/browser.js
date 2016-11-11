@@ -19,12 +19,8 @@ const initialState = function () {
     return {
         thumbnails: [],
         image_path: '',
-        last_image: {
-            id: config.get('last_image.id') || 0,
-            name: config.get('last_image.name'),
-            path: config.get('last_image.path')
-        },
-        active_image: config.get('last_image.id')
+        last_image: config.get('last_image') || 0,
+        active_image: config.get('last_image') || 0
     }
 };
 
@@ -46,9 +42,7 @@ elementReady('#shoujo').then(function () {
                 main_image.setAttribute('data-id', response.id);
                 main_image.setAttribute('data-name', response.name);
                 main_image.setAttribute('src', `file://${response.path}`);
-                config.set('last_image.id', response.id);
-                config.set('last_image.name', response.name);
-                config.set('last_image.path', response.path);
+                config.set('last_image', response.id);
                 $('#page')[0].scrollTop = 0;
             },
             processRequest: function (url, id) {
@@ -68,6 +62,7 @@ elementReady('#shoujo').then(function () {
             },
             reset: function () {
                 this.$http.get('/reset').then((response) => {
+                    config.set('last_image', false);
                     let initialData = initialState();
                     for (let prop in initialData) {
                         this[prop] = initialData[prop];
