@@ -15,23 +15,29 @@ var pageWidth = 0;
 var vm = null;
 const file = process.argv[2] || process.argv[1];
 
+const initialState = function () {
+    return {
+        thumbnails: [],
+        image_path: '',
+        last_image: {
+            id: config.get('last_image.id') || 0,
+            name: config.get('last_image.name'),
+            path: config.get('last_image.path')
+        },
+        active_image: config.get('last_image.id')
+    }
+};
+
 elementReady('#shoujo').then(function () {
     pageWidth = $('#page')[0].style.width;
 
     vm = new Vue({
         el: '#shoujo',
-        data: {
-            thumbnails: [],
-            image_path: '',
-            last_image: {
-                id: config.get('last_image.id') || 0,
-                name: config.get('last_image.name'),
-                path: config.get('last_image.path')
-            },
-            active_image: config.get('last_image.id')
+        data: function () {
+            return initialState();
         },
         methods: {
-            init: function() {
+            init: function () {
                 this.getImagePath();
                 this.fetchThumbnails();
             },
@@ -62,7 +68,10 @@ elementReady('#shoujo').then(function () {
             },
             reset: function () {
                 this.$http.get('/reset').then((response) => {
-                    console.log(response);
+                    let initialData = initialState();
+                    for (let prop in initialData) {
+                        this[prop] = initialData[prop];
+                    }
                 }, (response) => {
                     console.log(response);
                 });
