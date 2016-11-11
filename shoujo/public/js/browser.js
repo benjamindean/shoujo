@@ -30,6 +30,10 @@ elementReady('#shoujo').then(function () {
             active_image: config.get('last_image_id')
         },
         methods: {
+            init: function() {
+                this.getImagePath();
+                this.fetchThumbnails();
+            },
             handleAttributes: function (response) {
                 let main_image = $('#mainImage')[0];
                 main_image.setAttribute('data-id', response.id);
@@ -51,6 +55,13 @@ elementReady('#shoujo').then(function () {
             fetchThumbnails: function () {
                 this.$http.get('/list').then((response) => {
                     this.thumbnails = response.body;
+                }, (response) => {
+                    console.log(response);
+                });
+            },
+            loadFile: function (file) {
+                this.$http.get('/', {file: file}).then((response) => {
+                    this.init();
                 }, (response) => {
                     console.log(response);
                 });
@@ -80,8 +91,7 @@ elementReady('#shoujo').then(function () {
         }
     });
 
-    vm.getImagePath();
-    vm.fetchThumbnails();
+    vm.init();
 
 });
 

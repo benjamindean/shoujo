@@ -9,6 +9,7 @@ const file = process.argv[2] || process.argv[1];
 
 var rq = null;
 var mainWindow = null;
+const supportedFormats = ['zip'];
 
 const instanceRunning = app.makeSingleInstance(() => {
     if (mainWindow) {
@@ -67,7 +68,7 @@ app.on('ready', function () {
                     title: 'Open File',
                     properties: ['openFile'],
                     filters: [
-                        {name: 'Archives', extensions: ['zip']},
+                        {name: 'Archives', extensions: supportedFormats},
                     ]
                 }, function (path) {
                     mainWindow.webContents.send('load-file', path[0]);
