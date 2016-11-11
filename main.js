@@ -62,13 +62,17 @@ app.on('ready', function () {
         });
 
         process.on('open-file', function () {
-            dialog.showOpenDialog({
-                title: 'Open File',
-                properties: ['openFile'],
-                filters: [
-                    {name: 'Archives', extensions: ['zip']},
-                ]
-            });
+            dialog.showOpenDialog(
+                {
+                    title: 'Open File',
+                    properties: ['openFile'],
+                    filters: [
+                        {name: 'Archives', extensions: ['zip']},
+                    ]
+                }, function (path) {
+                    mainWindow.webContents.send('load-file', path[0]);
+                }
+            );
         });
 
         contextMenu();

@@ -85,6 +85,10 @@ elementReady('#shoujo').then(function () {
 
 });
 
+ipcRenderer.on('load-file', function (event, data) {
+    console.log(data);
+});
+
 ipcRenderer.on('toggle-full-screen', function (event, state) {
     vm.toggleFullScreen(state);
 });
