@@ -8,11 +8,11 @@
 <body>
 <div id="shoujo">
     <div id="thumbnails" v-on:click.prevent="onClickThumb">
-        <a v-for="thumb in thumbnails" href="#" class="thumb-item" v-bind:class="{ active: active_image ==  thumb.id }">
+        <a v-for="image in images" href="#" class="thumb-item" v-bind:class="{ active: active_image ==  image.id }">
             <div class="thumb-wrapper">
-                <img class="thumb" :data-name="thumb.name" :data-id="thumb.id"
-                     :src="'file:///' + image_path  + '/' + thumb.name"/>
-                <span class="thumb-id">{{ thumb.id + 1 }}</span>
+                <img class="thumb" :data-name="image.name" :data-id="image.id"
+                     :src="'file:///' + image_path  + '/' + image.name"/>
+                <span class="thumb-id">{{ image.id + 1 }}</span>
             </div>
         </a>
     </div>
@@ -55,8 +55,8 @@
 
         </div>
         <div class="image-container">
-            <img v-if="thumbnails[last_image]" v-on:click.prevent="onClickImage" class="page-image fit-width" id="mainImage"
-                 :src="'file:///' + image_path  + '/' + thumbnails[last_image].name" :data-name="thumbnails[last_image].name" :data-id="last_image"/>
+            <img v-if="images[last_image]" v-on:click.prevent="onClickImage" class="page-image fit-width" id="mainImage"
+                 :src="'file:///' + image_path  + '/' + images[last_image].name" :data-name="images[last_image].name" :data-id="last_image"/>
         </div>
     </div>
     <div id="clearfix"></div>

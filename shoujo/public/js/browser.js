@@ -17,7 +17,7 @@ const file = process.argv[2] || process.argv[1];
 
 const initialState = function () {
     return {
-        thumbnails: [],
+        images: [],
         image_path: '',
         last_image: config.get('last_image') || 0,
         active_image: config.get('last_image') || 0
@@ -35,7 +35,7 @@ elementReady('#shoujo').then(function () {
         methods: {
             init: function () {
                 this.getImagePath();
-                this.fetchThumbnails();
+                this.fetchImages();
             },
             handleAttributes: function (response) {
                 let main_image = $('#mainImage')[0];
@@ -53,9 +53,9 @@ elementReady('#shoujo').then(function () {
                     console.log(response);
                 });
             },
-            fetchThumbnails: function () {
+            fetchImages: function () {
                 this.$http.get('/list').then((response) => {
-                    this.thumbnails = response.body;
+                    this.images = response.body;
                 }, (response) => {
                     console.log(response);
                 });
