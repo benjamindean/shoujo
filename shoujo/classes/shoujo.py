@@ -4,9 +4,6 @@ import os
 import shutil
 from zipfile import ZipFile
 
-from PIL import Image
-
-
 class Shoujo():
     def __init__(self):
         self.image_list = list()
@@ -42,15 +39,6 @@ class Shoujo():
             )
         self.image_list_size = len(self.image_list) - 1
         return json.dumps(self.image_list)
-
-    # def generate_thumbs(self, file):
-    #     if os.listdir(self.thumbs_path) != []: return
-    #     for directory, subdirectories, files in os.walk(self.origin_path):
-    #         for idx, file in enumerate(sorted(files)):
-    #             with open(os.path.join(directory, file), 'r') as image:
-    #                 thumb = Image.open(image)
-    #                 thumb.thumbnail((200, 200), Image.ANTIALIAS)
-    #                 thumb.save(os.path.join(self.thumbs_path, file), thumb.format)
 
     def set_paths(self):
         self.volume_path = os.path.join(os.path.expanduser('~/.config/Shoujo/volume_cache'), self.filename)
