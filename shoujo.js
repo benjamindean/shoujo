@@ -3,8 +3,10 @@
 const {Menu, BrowserWindow, ipcMain, app, electron, dialog} = require('electron');
 const path = require('path');
 const appMenu = require('./shoujo/public/js/menu');
-const config = require('./shoujo/public/js/config');
+const appConfig = require('./shoujo/public/js/config');
 const contextMenu = require('./shoujo/public/js/context-menu');
+const Config = require('electron-config');
+const config = new Config();
 const file = process.argv[2] || process.argv[1];
 
 var rq = null;
@@ -22,6 +24,26 @@ if (instanceRunning) {
     app.quit();
 }
 
+const openFile = function() {
+    dialog.showOpenDialog(
+        {
+            title: 'Open File',
+            properties: ['openFile'],
+            defaultPath: config.get('fileBrowserPath'),
+            filters: [
+                {
+                    name: 'Archives',
+                    extensions: appConfig.supportedFormats
+                },
+            ]
+        }, function (filePath) {
+            if(!filePath) return;
+            config.set('fileBrowserPath', path.dirname(filePath[0]));
+            mainWindow.webContents.send('load-file', filePath[0]);
+        }
+    );
+};
+
 app.on('window-all-closed', function () {
     app.quit();
 });
@@ -29,7 +51,7 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
     var subpy = require('child_process').spawn('python', [path.join(__dirname, 'shoujo/server.py')]);
     rq = require('request-promise');
-    var mainAddr = (file && file !== '.') ? `${config.host}/?file=${file}` : `${config.host}`;
+    var mainAddr = (file && file !== '.') ? `${appConfig.host}/?file=${file}` : `${appConfig.host}`;
 
     var openWindow = function () {
         mainWindow = new BrowserWindow({
@@ -76,20 +98,5 @@ app.on('ready', function () {
     startUp();
 });
 
-process.on('open-file', function () {
-    dialog.showOpenDialog(
-        {
-            title: 'Open File',
-            properties: ['openFile'],
-            filters: [
-                {
-                    name: 'Archives',
-                    extensions: config.supportedFormats
-                },
-            ]
-        }, function (path) {
-            mainWindow.webContents.send('load-file', path[0]);
-        }
-    );
-});
+process.on('open-file', openFile);
 

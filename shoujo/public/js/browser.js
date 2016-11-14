@@ -13,7 +13,6 @@ Vue.use(VueResource);
 
 var pageWidth = 0;
 var vm = null;
-const file = process.argv[2] || process.argv[1];
 
 const initialState = function () {
     return {
@@ -104,11 +103,15 @@ elementReady('#shoujo').then(function () {
 });
 
 ipcRenderer.on('load-file', function (event, file) {
+    window.location.replace('/?file=' + file);
+    if (!vm) return;
     vm.loadFile(file).then((response) => {
+        config.set('last_file', file);
         vm.init();
     });
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {
+    if (!vm) return;
     vm.toggleFullScreen(state);
 });

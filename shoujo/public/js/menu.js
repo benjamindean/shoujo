@@ -11,7 +11,7 @@ const template = [
                 accelerator: 'Ctrl+O',
                 enabled: true,
                 click () {
-                    process.emit('open-file', 'test');
+                    process.emit('open-file', true);
                 }
             }
         ]
