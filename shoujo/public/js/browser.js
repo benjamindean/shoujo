@@ -18,6 +18,7 @@ var glob = remote.getGlobal('shared');
 
 const initialState = function () {
     return {
+        file: glob.file,
         images: [],
         image_path: '',
         last_image: config.get('last_image') || 0,
