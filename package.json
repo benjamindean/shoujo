@@ -1,7 +1,7 @@
 {
   "name": "Shoujo",
   "version": "0.0.1",
-  "main": "main.js",
+  "main": "shoujo.js",
   "description": "Manga and comic book reader",
   "repository": "benjamindean/shoujo",
   "author": {
@@ -12,7 +12,7 @@
   "scripts": {
     "start": "electron . test.zip",
     "build": "npm run build:linux && npm run deb64",
-    "build:linux": "electron-packager . --overwrite --out=dist --prune --platform=linux --arch=x64 --app-bundle-id=com.benjaminabel.shoujo --app-version=$npm_package_version --ignore=test.zip",
+    "build:linux": "electron-packager . --overwrite --out=dist --prune --platform=linux --arch=x64 --app-bundle-id=com.benjaminabel.shoujo --app-version=$npm_package_version --ignore='^src$' --ignore=test.zip",
     "deb64": "electron-installer-debian --src dist/$npm_package_name-linux-x64/ --arch amd64 --config configs/deb.json"
   },
   "dependencies": {
@@ -33,7 +33,6 @@
     "gulp": "^3.9.1",
     "gulp-cssmin": "^0.1.7",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.2",
-    "gulp-uglify": "^2.0.0"
+    "gulp-sass": "^2.3.2"
   }
 }
