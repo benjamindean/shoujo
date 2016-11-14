@@ -14,7 +14,7 @@ Vue.use(VueResource);
 
 var pageWidth = 0;
 var vm = null;
-var global = remote.getGlobal('shared');
+var glob = remote.getGlobal('shared');
 
 const initialState = function () {
     return {
@@ -96,20 +96,24 @@ elementReady('#shoujo').then(function () {
                 $('#toolbar')[0].style.display = state ? "none" : "flex";
                 $('#thumbnails')[0].style.display = state ? "none" : "block";
                 $('#page')[0].style.width = state ? "100%" : pageWidth;
+            },
+            handleFile: function (file) {
+                this.loadFile(file).then((response) => {
+                    config.set('last_file', file);
+                    this.init();
+                });
             }
         }
     });
 
-    if (window.location.search.substr(1)) vm.init();
+    if (glob.file) {
+        vm.handleFile(glob.file);
+    }
+
 });
 
 ipcRenderer.on('load-file', function (event, file) {
-    window.location.replace('/?file=' + file);
-    if (!vm) return;
-    vm.loadFile(file).then((response) => {
-        config.set('last_file', file);
-        vm.init();
-    });
+    vm.handleFile(file);
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {

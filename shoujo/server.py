@@ -17,8 +17,11 @@ app = Flask(
 @app.route("/")
 def hello():
     file = request.args.get('file')
-    if file: shoujo_cls.extract_file(file)
-    return app.send_static_file('html/index.html')
+    if file:
+        shoujo_cls.extract_file(file)
+        return ('', 204)
+    else:
+        return app.send_static_file('html/index.html')
 
 
 @app.route('/image/<int:image_id>')
