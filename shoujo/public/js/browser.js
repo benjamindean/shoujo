@@ -100,10 +100,10 @@ elementReady('#shoujo').then(function () {
         }
     });
 
+    if (window.location.search.substr(1)) vm.init();
 });
 
 ipcRenderer.on('load-file', function (event, file) {
-    console.log(file);
     vm.loadFile(file).then((response) => {
         vm.init();
     });

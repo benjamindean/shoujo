@@ -29,7 +29,7 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
     var subpy = require('child_process').spawn('python', [path.join(__dirname, 'shoujo/server.py')]);
     rq = require('request-promise');
-    var mainAddr = file ? `${config.host}?file=${file}` : `${config.host}`;
+    var mainAddr = (file && file !== '.') ? `${config.host}/?file=${file}` : `${config.host}`;
 
     var openWindow = function () {
         mainWindow = new BrowserWindow({
