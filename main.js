@@ -9,7 +9,6 @@ const file = process.argv[2] || process.argv[1];
 
 var rq = null;
 var mainWindow = null;
-const supportedFormats = ['zip'];
 
 const instanceRunning = app.makeSingleInstance(() => {
     if (mainWindow) {
@@ -70,7 +69,7 @@ app.on('ready', function () {
                     filters: [
                         {
                             name: 'Archives',
-                            extensions: supportedFormats
+                            extensions: config.supportedFormats
                         },
                     ]
                 }, function (path) {
