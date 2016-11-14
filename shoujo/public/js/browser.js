@@ -73,11 +73,7 @@ elementReady('#shoujo').then(function () {
             },
             loadFile: function (file) {
                 this.reset();
-                this.$http.get('/?file=' + file).then((response) => {
-                    this.init();
-                }, (response) => {
-                    console.log(response);
-                });
+                return this.$http.get('/?file=' + file);
             },
             getImagePath: function () {
                 this.$http.get('/get-image-path').then((response) => {
@@ -104,12 +100,13 @@ elementReady('#shoujo').then(function () {
         }
     });
 
-    vm.init();
-
 });
 
 ipcRenderer.on('load-file', function (event, file) {
-    vm.loadFile(file);
+    console.log(file);
+    vm.loadFile(file).then((response) => {
+        vm.init();
+    });
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {

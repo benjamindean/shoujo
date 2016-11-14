@@ -30,7 +30,7 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
     var subpy = require('child_process').spawn('python', [path.join(__dirname, 'shoujo/server.py')]);
     rq = require('request-promise');
-    var mainAddr = `${config.host}/?file=${file}`;
+    var mainAddr = `${config.host}`;
 
     var openWindow = function () {
         mainWindow = new BrowserWindow({
@@ -68,7 +68,10 @@ app.on('ready', function () {
                     title: 'Open File',
                     properties: ['openFile'],
                     filters: [
-                        {name: 'Archives', extensions: supportedFormats},
+                        {
+                            name: 'Archives',
+                            extensions: supportedFormats
+                        },
                     ]
                 }, function (path) {
                     mainWindow.webContents.send('load-file', path[0]);
@@ -77,18 +80,16 @@ app.on('ready', function () {
         });
 
         contextMenu();
-
     };
 
-    var startUp = function () {
-        rq(mainAddr)
-            .then(function (htmlString) {
-                openWindow();
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
+    const startUp = function () {
+        rq(mainAddr).then(function () {
+            openWindow();
+        }).catch(function (err) {
+            console.log(err);
+        });
     };
 
     startUp();
 });
+
