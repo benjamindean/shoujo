@@ -7,10 +7,18 @@ const appConfig = require('./shoujo/public/js/config');
 const contextMenu = require('./shoujo/public/js/context-menu');
 const Config = require('electron-config');
 const config = new Config();
-const file = process.argv[2] || process.argv[1];
+
+const file = function() {
+    let arg = process.argv[2] || process.argv[1];
+    return (arg && arg !== '.') ? arg : false;
+}();
 
 var rq = null;
 var mainWindow = null;
+
+global.shared = {
+    file: file
+};
 
 const instanceRunning = app.makeSingleInstance(() => {
     if (mainWindow) {
@@ -51,7 +59,7 @@ app.on('window-all-closed', function () {
 app.on('ready', function () {
     var subpy = require('child_process').spawn('python', [path.join(__dirname, 'shoujo/server.py')]);
     rq = require('request-promise');
-    var mainAddr = (file && file !== '.') ? `${appConfig.host}/?file=${file}` : `${appConfig.host}`;
+    var mainAddr = file ? `${appConfig.host}/?file=${file}` : `${appConfig.host}`;
 
     var openWindow = function () {
         mainWindow = new BrowserWindow({

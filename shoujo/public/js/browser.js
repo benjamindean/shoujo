@@ -9,10 +9,12 @@ const Config = require('electron-config');
 const config = new Config();
 const Vue = require('vue/dist/vue.js');
 const VueResource = require('vue-resource');
+const remote = electron.remote;
 Vue.use(VueResource);
 
 var pageWidth = 0;
 var vm = null;
+var global = remote.getGlobal('shared');
 
 const initialState = function () {
     return {
@@ -25,7 +27,6 @@ const initialState = function () {
 
 elementReady('#shoujo').then(function () {
     pageWidth = $('#page')[0].style.width;
-
     vm = new Vue({
         el: '#shoujo',
         data: function () {
