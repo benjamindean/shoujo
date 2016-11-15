@@ -26,3 +26,17 @@ html, body {
   min-height: 100%;
   display: inline;
 }
+
+#openFile {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+
+  .link {
+    text-decoration: none;
+    color: lighten($main_color, 50);
+    font-size: xx-large;
+  }
+}

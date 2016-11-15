@@ -97,8 +97,12 @@ elementReady('#shoujo').then(function () {
             handleFile: function (file) {
                 this.loadFile(file).then((response) => {
                     config.set('last_file', file);
+                    this.file = file;
                     this.init();
                 });
+            },
+            openFile: function () {
+                ipcRenderer.send('open-file', true);
             }
         }
     });

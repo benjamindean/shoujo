@@ -7,7 +7,7 @@ const appConfig = require('./shoujo/public/js/config');
 const contextMenu = require('./shoujo/public/js/context-menu');
 const Config = require('electron-config');
 const config = new Config();
-const file = function() {
+const file = function () {
     let arg = process.argv[2] || process.argv[1];
     return (arg && arg !== '.') ? arg : false;
 }();
@@ -31,7 +31,7 @@ if (instanceRunning) {
     app.quit();
 }
 
-const openFile = function() {
+const openFile = function () {
     dialog.showOpenDialog(
         {
             title: 'Open File',
@@ -44,7 +44,7 @@ const openFile = function() {
                 },
             ]
         }, function (filePath) {
-            if(!filePath) return;
+            if (!filePath) return;
             config.set('fileBrowserPath', path.dirname(filePath[0]));
             mainWindow.webContents.send('load-file', filePath[0]);
         }
@@ -92,6 +92,7 @@ app.on('ready', function () {
         });
 
         appMenu.eventEmitter.on('open-file', openFile);
+        ipcMain.on('open-file', openFile);
 
         contextMenu();
     };

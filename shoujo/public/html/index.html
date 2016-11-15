@@ -7,7 +7,13 @@
 </head>
 <body>
 <div id="shoujo">
-    <div id="thumbnails" v-on:click.prevent="onClickThumb">
+
+    <div v-if="!file" id="openFile">
+        <a href="#" v-on:click.prevent="openFile" class="link">Open File</a>
+    </div>
+
+
+    <div v-if="file" id="thumbnails" v-on:click.prevent="onClickThumb">
         <a v-for="image in images" href="#" class="thumb-item" v-bind:class="{ active: active_image ==  image.id }">
             <div class="thumb-wrapper">
                 <img class="thumb" :data-name="image.name" :data-id="image.id"
@@ -16,7 +22,7 @@
             </div>
         </a>
     </div>
-    <div id="page">
+    <div v-if="file" id="page">
         <div id="toolbar">
 
             <svg class="svg-icon" viewBox="0 0 20 20">
