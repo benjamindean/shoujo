@@ -7,10 +7,17 @@ const app = electron.app;
 const {download} = require('electron-dl');
 const notifier = require('node-notifier');
 const path = require('path');
+const eventEmitter = require('./menu').eventEmitter;
 
 function create(win) {
     (win.webContents || win.getWebContents()).on('context-menu', (e, props) => {
-        let menuTpl = [];
+        let menuTpl = [{
+            id: 'settings',
+            label: 'Settings',
+            click(item, win) {
+                eventEmitter.emit('open-config', true);
+            }
+        }];
 
         if (props.mediaType === 'image') {
             menuTpl.push({
@@ -19,22 +26,13 @@ function create(win) {
                 click(item, win) {
                     download(win, props.srcURL)
                         .then(notifier.notify({
-                                'title': app.getName(),
-                                'message': 'Image has been saved to ' + app.getPath('downloads'),
-                                'icon': props.srcURL
-                            }))
-                }
-            });
-        } else {
-            menuTpl.push({
-                id: 'settings',
-                label: 'Settings',
-                click(item, win) {
-                    console.log(item);
+                            'title': app.getName(),
+                            'message': 'Image has been saved to ' + app.getPath('downloads'),
+                            'icon': props.srcURL
+                        }))
                 }
             });
         }
-
         if (menuTpl && menuTpl.length > 0) {
             const menu = (electron.Menu || electron.remote.Menu).buildFromTemplate(menuTpl);
             menu.popup(electron.remote ? electron.remote.getCurrentWindow() : win);
