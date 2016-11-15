@@ -1,16 +1,12 @@
 'use strict';
 
-const electron = require('electron');
+const {ipcRenderer, remote} = require('electron');
 const elementReady = require('element-ready');
 const globalConfig = require('./config');
-const ipcRenderer = electron.ipcRenderer;
-const $ = document.querySelectorAll.bind(document);
 const Config = require('electron-config');
 const config = new Config();
-const Vue = require('vue/dist/vue.js');
-const VueResource = require('vue-resource');
-const remote = electron.remote;
-Vue.use(VueResource);
+const Vue = require('vue/dist/vue.js').use(require('vue-resource'));
+const $ = document.querySelectorAll.bind(document);
 
 var pageWidth = 0;
 var vm = null;
