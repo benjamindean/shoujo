@@ -35,6 +35,7 @@ elementReady('#shoujo').then(function () {
                 this.fetchImages();
             },
             handleAttributes: function (response) {
+                if(!this.file) return;
                 let main_image = $('#mainImage')[0];
                 main_image.setAttribute('data-id', response.id);
                 main_image.setAttribute('data-name', response.name);
@@ -90,6 +91,7 @@ elementReady('#shoujo').then(function () {
                 this.active_image++;
             },
             toggleFullScreen: function (state) {
+                if(!this.file) return;
                 $('#toolbar')[0].style.display = state ? "none" : "flex";
                 $('#thumbnails')[0].style.display = state ? "none" : "block";
                 $('#page')[0].style.width = state ? "100%" : pageWidth;
