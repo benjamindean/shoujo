@@ -1,8 +1,7 @@
 'use strict';
 
 const {Menu} = require('electron');
-const events = require('events');
-const eventEmitter = new events.EventEmitter();
+const eventEmitter = require('./event');
 
 const template = [
     {

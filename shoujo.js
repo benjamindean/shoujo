@@ -8,6 +8,7 @@ const configWindow = require('./shoujo/public/js/config-window');
 const contextMenu = require('./shoujo/public/js/context-menu')();
 const Config = require('electron-config');
 const config = new Config();
+const eventEmitter = require('./shoujo/public/js/event');
 
 const file = function () {
     let arg = process.argv[2] || process.argv[1];
@@ -104,8 +105,8 @@ app.on('ready', function () {
             this.webContents.send('toggle-full-screen', false);
         });
 
-        appMenu.eventEmitter.on('open-file', openFile);
-        appMenu.eventEmitter.on('open-config', openConfig);
+        eventEmitter.on('open-file', openFile);
+        eventEmitter.on('open-config', openConfig);
 
         ipcMain.on('open-file', openFile);
         ipcMain.on('open-config', openConfig);

@@ -1,3 +1,2 @@
-/**
- * Created by khazizovroman on 11/15/16.
- */
+const events = require('events');
+module.exports = new events.EventEmitter();

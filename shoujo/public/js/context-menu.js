@@ -7,7 +7,7 @@ const app = electron.app;
 const {download} = require('electron-dl');
 const notifier = require('node-notifier');
 const path = require('path');
-const eventEmitter = require('./menu').eventEmitter;
+const eventEmitter = require('./event');
 
 function create(win) {
     (win.webContents || win.getWebContents()).on('context-menu', (e, props) => {
