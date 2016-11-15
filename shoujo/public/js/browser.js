@@ -101,6 +101,9 @@ elementReady('#shoujo').then(function () {
                     this.init();
                 });
             },
+            openConfig: function () {
+                ipcRenderer.send('open-config', true);
+            },
             openFile: function () {
                 ipcRenderer.send('open-file', true);
             }

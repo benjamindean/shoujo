@@ -26,6 +26,7 @@ const template = [
                 accelerator: 'Ctrl+E',
                 enabled: true,
                 click () {
+                    eventEmitter.emit('open-config', true);
                 }
             }
         ]

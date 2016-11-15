@@ -4,9 +4,11 @@ const {Menu, BrowserWindow, ipcMain, app, electron, dialog} = require('electron'
 const path = require('path');
 const appMenu = require('./shoujo/public/js/menu');
 const appConfig = require('./shoujo/public/js/config');
-const contextMenu = require('./shoujo/public/js/context-menu');
+const configWindow = require('./shoujo/public/js/config-window');
+const contextMenu = require('./shoujo/public/js/context-menu')();
 const Config = require('electron-config');
 const config = new Config();
+
 const file = function () {
     let arg = process.argv[2] || process.argv[1];
     return (arg && arg !== '.') ? arg : false;
@@ -14,6 +16,7 @@ const file = function () {
 
 var rq = null;
 var mainWindow = null;
+var configWindowInstance = null;
 
 global.shared = {
     file: file
@@ -51,6 +54,14 @@ const openFile = function () {
     );
 };
 
+const openConfig = function () {
+    let pos = mainWindow.getPosition();
+    let size = mainWindow.getSize();
+    configWindowInstance = configWindow.create();
+    configWindowInstance.setPosition(pos[0] + Math.round(size[0] / 3), pos[1] + Math.round(size[1] / 3));
+    configWindowInstance.show();
+};
+
 app.on('window-all-closed', function () {
     app.quit();
 });
@@ -66,6 +77,7 @@ app.on('ready', function () {
             height: 600,
             minWidth: 800,
             minHeight: 600,
+            center: true,
             webPreferences: {
                 preload: path.join(__dirname, 'shoujo/public/js/browser.js'),
                 nodeIntegration: false,
@@ -79,6 +91,7 @@ app.on('ready', function () {
         Menu.setApplicationMenu(appMenu.template);
 
         mainWindow.on('closed', function () {
+            configWindowInstance = null;
             mainWindow = null;
             subpy.kill('SIGINT');
         });
@@ -92,9 +105,11 @@ app.on('ready', function () {
         });
 
         appMenu.eventEmitter.on('open-file', openFile);
-        ipcMain.on('open-file', openFile);
+        appMenu.eventEmitter.on('open-config', openConfig);
 
-        contextMenu();
+        ipcMain.on('open-file', openFile);
+        ipcMain.on('open-config', openConfig);
+
     };
 
     const startUp = function () {

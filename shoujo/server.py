@@ -31,12 +31,16 @@ def get_image(image_id):
                     mimetype="application/json")
 
 
+@app.route('/config')
+def config():
+    return app.send_static_file('html/config.html')
+
+
 @app.route('/list')
 def get_image_list():
     return Response(response=shoujo_cls.get_image_list(),
                     status=200,
                     mimetype="application/json")
-
 
 @app.route('/get-image-path')
 def get_image_path():

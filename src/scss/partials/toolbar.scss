@@ -1,9 +1,5 @@
 #toolbar {
-  width: inherit;
-  display: flex;
-  border-bottom: 1px solid black;
-  position: fixed;
-  background: white;
-  align-items: center;
+  position: absolute;
   justify-content: center;
+  right: 0;
 }
