@@ -1,6 +1,8 @@
 'use strict';
 
 const {Menu} = require('electron');
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
 
 const template = [
     {
@@ -11,7 +13,7 @@ const template = [
                 accelerator: 'Ctrl+O',
                 enabled: true,
                 click () {
-                    process.emit('open-file', true);
+                    eventEmitter.emit('open-file', true);
                 }
             }
         ]
@@ -60,4 +62,7 @@ const template = [
     }
 ];
 
-module.exports = Menu.buildFromTemplate(template);
+module.exports = {
+    template: Menu.buildFromTemplate(template),
+    eventEmitter: eventEmitter
+};

@@ -76,7 +76,7 @@ app.on('ready', function () {
 
         mainWindow.loadURL(mainAddr);
         mainWindow.webContents.openDevTools();
-        Menu.setApplicationMenu(appMenu);
+        Menu.setApplicationMenu(appMenu.template);
 
         mainWindow.on('closed', function () {
             mainWindow = null;
@@ -91,6 +91,8 @@ app.on('ready', function () {
             this.webContents.send('toggle-full-screen', false);
         });
 
+        appMenu.eventEmitter.on('open-file', openFile);
+
         contextMenu();
     };
 
@@ -104,6 +106,4 @@ app.on('ready', function () {
 
     startUp();
 });
-
-process.on('open-file', openFile);
 
