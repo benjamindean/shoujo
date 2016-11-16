@@ -12,9 +12,9 @@
         <a href="#" v-on:click.prevent="openFile" class="link">Open File</a>
     </div>
 
-
     <div v-if="file" id="thumbnails" v-on:click.prevent="onClickThumb">
-        <a v-for="image in images" href="#" class="thumb-item" v-bind:class="{ active: active_image ==  image.id }">
+        <a v-for="image in images" :key="image.id" href="#" class="thumb-item"
+           :class="{ active: active_image ==  image.id }">
             <div class="thumb-wrapper">
                 <img class="thumb" :data-name="image.name" :data-id="image.id"
                      :src="'file:///' + image_path  + '/' + image.name"/>
