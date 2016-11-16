@@ -4,12 +4,17 @@ const {BrowserWindow} = require('electron');
 const appConfig = require('./config');
 const path = require('path');
 
+const size = {
+    width: 400,
+    height: 300
+};
+
 const createWindow = function () {
     let configWindow = new BrowserWindow({
-        width: 400,
-        height: 300,
-        minWidth: 400,
-        minHeight: 300,
+        width: size.width,
+        height: size.height,
+        minWidth: size.width,
+        minHeight: size.height,
         webPreferences: {
             preload: path.join(__dirname, 'browser.js'),
             nodeIntegration: false,
@@ -29,5 +34,6 @@ const createWindow = function () {
 
 
 module.exports = {
-    create: createWindow
+    create: createWindow,
+    size: size
 };

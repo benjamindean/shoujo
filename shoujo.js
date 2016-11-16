@@ -15,9 +15,9 @@ const file = function () {
     return (arg && arg !== '.') ? arg : false;
 }();
 
-var rq = null;
-var mainWindow = null;
-var configWindowInstance = null;
+let rq = null;
+let mainWindow = null;
+let configInstance = null;
 
 global.shared = {
     file: file
@@ -25,15 +25,12 @@ global.shared = {
 
 const instanceRunning = app.makeSingleInstance(() => {
     if (mainWindow) {
-        if (mainWindow.isMinimized()) {
-            mainWindow.restore();
-        }
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus()
     }
 });
 
-if (instanceRunning) {
-    app.quit();
-}
+if (instanceRunning) app.quit();
 
 const openFile = function () {
     dialog.showOpenDialog(
@@ -56,11 +53,30 @@ const openFile = function () {
 };
 
 const openConfig = function () {
+    if (configInstance && configInstance.isMinimized()) {
+        configInstance.restore();
+        return;
+    }
+    if (configInstance) return;
+
     let pos = mainWindow.getPosition();
     let size = mainWindow.getSize();
-    configWindowInstance = configWindow.create();
-    configWindowInstance.setPosition(pos[0] + Math.round(size[0] / 3), pos[1] + Math.round(size[1] / 3));
-    configWindowInstance.show();
+    let window = configWindow.create();
+
+    window.setParentWindow(mainWindow);
+    window.setPosition(
+        pos[0] + Math.round((size[0] / 2) - (configWindow.size.width / 2)),
+        pos[1] + Math.round((size[1] / 2) - (configWindow.size.height / 2))
+    );
+
+    window.on('close', () => {
+        configInstance = null;
+    });
+
+    window.once('ready-to-show', () => {
+        configInstance = window;
+        window.show();
+    });
 };
 
 app.on('window-all-closed', function () {
@@ -92,7 +108,7 @@ app.on('ready', function () {
         Menu.setApplicationMenu(appMenu.template);
 
         mainWindow.on('closed', function () {
-            configWindowInstance = null;
+            configInstance = null;
             mainWindow = null;
             subpy.kill('SIGINT');
         });
