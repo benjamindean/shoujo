@@ -17,7 +17,7 @@ class Shoujo():
         with ZipFile(zipfile, 'r') as zip_file:
             self.filename = os.path.splitext(zip_file.filename)[0]
             self.set_paths()
-            for idx, member in enumerate(zip_file.namelist()):
+            for member in zip_file.namelist():
                 filename = os.path.basename(member)
 
                 if not filename:
@@ -29,7 +29,7 @@ class Shoujo():
                     shutil.copyfileobj(source, target)
 
     def get_image_list(self):
-        if len(self.image_list): return json.dumps(self.image_list)
+        self.image_list = list()
         for idx, filename in enumerate(sorted(os.listdir(self.volume_path))):
             self.image_list.append(
                 {

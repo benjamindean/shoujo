@@ -53,7 +53,9 @@ elementReady('#shoujo').then(function () {
             },
             fetchImages: function () {
                 this.$http.get('/list').then((response) => {
+                    if(this.images.length == response.body.length) return;
                     this.images = response.body;
+                    this.fetchImages();
                 }, (response) => {
                     console.log(response);
                 });

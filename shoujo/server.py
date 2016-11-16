@@ -1,4 +1,5 @@
 import sys
+import threading
 from flask import Flask, Response, request
 
 from classes.config import Config
@@ -18,7 +19,7 @@ app = Flask(
 def hello():
     file = request.args.get('file')
     if file:
-        shoujo_cls.extract_file(file)
+        threading.Thread(target=shoujo_cls.extract_file, args=(file,)).start()
         return ('', 204)
     else:
         return app.send_static_file('html/index.html')
