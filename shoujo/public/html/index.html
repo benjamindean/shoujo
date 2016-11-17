@@ -20,7 +20,7 @@
         <a v-for="image in images" :key="image.id" href="#" class="thumb-item"
            :class="{ active: active_image ==  image.id }">
             <div class="thumb-wrapper">
-                <img class="thumb" :data-name="image.name" :data-id="image.id"
+                <img class="thumb" :data-name="image.name" :data-id="image.id" :id="'thumb-' + image.id"
                      :src="'file:///' + image_path  + '/' + image.name"/>
                 <span class="thumb-id">{{ image.id + 1 }}</span>
             </div>

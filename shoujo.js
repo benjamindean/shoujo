@@ -1,6 +1,7 @@
 'use strict';
 
 const {Menu, BrowserWindow, ipcMain, app, electron, dialog} = require('electron');
+const isDev = require('electron-is-dev');
 const path = require('path');
 const appMenu = require('./shoujo/public/js/menu');
 const appConfig = require('./shoujo/public/js/config');
@@ -103,7 +104,7 @@ app.on('ready', function () {
         });
 
         mainWindow.loadURL(mainAddr);
-        mainWindow.webContents.openDevTools();
+        if (isDev) mainWindow.webContents.openDevTools();
         Menu.setApplicationMenu(appMenu.template);
         require('./shoujo/public/js/context-menu')();
 

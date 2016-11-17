@@ -31,6 +31,7 @@ elementReady('#shoujo').then(function () {
         methods: {
             handleAttributes: function (response) {
                 if (!this.file) return;
+                this.scrollToThumb(response.id);
                 let main_image = $('#mainImage')[0];
 
                 let attrs = {
@@ -42,7 +43,6 @@ elementReady('#shoujo').then(function () {
                 for (let key in attrs) {
                     main_image.setAttribute(key, attrs[key]);
                 }
-
                 config.set('last_image', response.id);
                 $('#page')[0].scrollTop = 0;
             },
@@ -72,6 +72,10 @@ elementReady('#shoujo').then(function () {
                 let id = e.target.getAttribute('data-id');
                 this.processRequest(`${globalConfig.host}/image/`, id);
                 this.active_image = id;
+            },
+            scrollToThumb(id) {
+                document.getElementById("thumb-" + id).scrollIntoView();
+                document.getElementById("thumbnails").scrollTop -= window.innerHeight / 3;
             },
             onClickImage: function (e) {
                 let id = e.target.getAttribute('data-id');
