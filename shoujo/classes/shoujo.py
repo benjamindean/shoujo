@@ -13,9 +13,13 @@ class Shoujo():
         atexit.register(self.clear_cache)
 
     def extract_file(self, zipfile):
+        filename = os.path.basename(zipfile)
+        if filename != self.filename:
+            self.reset()
+            self.filename = filename
+
         if len(self.image_list): return
         with ZipFile(zipfile, 'r') as zip_file:
-            self.filename = os.path.splitext(zip_file.filename)[0]
             self.set_paths()
             for member in zip_file.namelist():
                 filename = os.path.basename(member)

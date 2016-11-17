@@ -63,7 +63,6 @@ elementReady('#shoujo').then(function () {
                 for (let prop in initialData) {
                     this[prop] = initialData[prop];
                 }
-                this.$http.get('/reset');
             },
             getImagePath: function () {
                 this.$http.get('/get-image-path').then((response) => {
@@ -88,12 +87,14 @@ elementReady('#shoujo').then(function () {
             handleFile: function (file) {
                 this.reset();
                 this.loading = true;
-                if (config.get('last_file') !== this.file) {
-                    config.set('last_image', false);
-                }
                 this.file = file;
-                this.$http.get('/?file=' + file).then(() => {
+                if (config.get('last_file') !== file) {
+                    config.set('last_image', 0);
                     config.set('last_file', file);
+                    this.last_image = 0;
+                    this.active_image = 0;
+                }
+                this.$http.get('/?file=' + file).then(() => {
                     this.getImagePath();
                     this.fetchImages();
                     this.loading = false;
@@ -108,8 +109,7 @@ elementReady('#shoujo').then(function () {
         }
     });
 
-    vm.file = glob.file || config.get('last_file');
-    vm.handleFile(vm.file);
+    vm.handleFile(glob.file || config.get('last_file'));
 
 });
 
