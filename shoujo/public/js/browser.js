@@ -14,7 +14,7 @@ var glob = remote.getGlobal('shared');
 
 const initialState = function () {
     return {
-        file: glob.file,
+        file: false,
         loading: false,
         images: [],
         image_path: '',
@@ -58,13 +58,12 @@ elementReady('#shoujo').then(function () {
                     this.images = response.body;
                 });
             },
-            reset: function (file) {
-                this.$http.get('/reset').then((response) => {
-                    let initialData = initialState();
-                    for (let prop in initialData) {
-                        this[prop] = initialData[prop];
-                    }
-                });
+            reset: function () {
+                let initialData = initialState();
+                for (let prop in initialData) {
+                    this[prop] = initialData[prop];
+                }
+                this.$http.get('/reset');
             },
             getImagePath: function () {
                 this.$http.get('/get-image-path').then((response) => {
@@ -87,12 +86,12 @@ elementReady('#shoujo').then(function () {
                 state ? body.classList.add('fullscreen') : body.classList.remove('fullscreen');
             },
             handleFile: function (file) {
+                this.reset();
                 this.loading = true;
-                this.file = file;
-                if (config.get('last_file') !== file) {
+                if (config.get('last_file') !== this.file) {
                     config.set('last_image', false);
                 }
-                this.reset(file);
+                this.file = file;
                 this.$http.get('/?file=' + file).then(() => {
                     config.set('last_file', file);
                     this.getImagePath();
@@ -109,9 +108,8 @@ elementReady('#shoujo').then(function () {
         }
     });
 
-    if (glob.file) {
-        vm.handleFile(glob.file);
-    }
+    vm.file = glob.file || config.get('last_file');
+    vm.handleFile(vm.file);
 
 });
 
