@@ -73,9 +73,10 @@ elementReady('#shoujo').then(function () {
                 this.processRequest(`${globalConfig.host}/image/next/`, id);
                 this.active_image++;
             },
-            toggleFullScreen: function () {
+            toggleFullScreen: function (state) {
                 if (!this.file) return;
-                $('body')[0].classList.toggle('fullscreen');
+                let body = $('body')[0];
+                state ? body.classList.add('fullscreen') : body.classList.remove('fullscreen');
             },
             handleFile: function (file) {
                 this.loading = true;
@@ -110,6 +111,6 @@ ipcRenderer.on('load-file', function (event, file) {
     vm.handleFile(file);
 });
 
-ipcRenderer.on('toggle-full-screen', function () {
-    vm.toggleFullScreen();
+ipcRenderer.on('toggle-full-screen', function (event, state) {
+    vm.toggleFullScreen(state);
 });
