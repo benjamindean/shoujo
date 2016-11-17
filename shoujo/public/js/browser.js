@@ -15,7 +15,7 @@ var glob = remote.getGlobal('shared');
 const initialState = function () {
     return {
         file: glob.file,
-        loading: true,
+        loading: false,
         images: [],
         image_path: '',
         last_image: config.get('last_image') || 0,
@@ -78,10 +78,10 @@ elementReady('#shoujo').then(function () {
                 $('body')[0].classList.toggle('fullscreen');
             },
             handleFile: function (file) {
+                this.loading = true;
                 if (config.get('last_file') !== file) {
                     config.set('last_image', false);
                 }
-                this.loading = true;
                 this.reset(file);
                 this.$http.get('/?file=' + file).then(() => {
                     config.set('last_file', file);

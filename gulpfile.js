@@ -1,7 +1,7 @@
 var gulp = require('gulp'),
     cssmin = require('gulp-cssmin'),
     rename = require('gulp-rename'),
-    sass = require('gulp-sass')
+    sass = require('gulp-sass');
 
 gulp.task('css', function () {
     gulp.src('src/scss/*.scss')
