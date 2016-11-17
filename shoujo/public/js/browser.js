@@ -33,9 +33,17 @@ elementReady('#shoujo').then(function () {
             handleAttributes: function (response) {
                 if (!this.file) return;
                 let main_image = $('#mainImage')[0];
-                main_image.setAttribute('data-id', response.id);
-                main_image.setAttribute('data-name', response.name);
-                main_image.setAttribute('src', `file://${response.path}`);
+
+                let attrs = {
+                    'data-id': response.id,
+                    'data-name': response.name,
+                    'src': `file://${response.path}`
+                };
+
+                for (let key in attrs) {
+                    main_image.setAttribute(key, attrs[key]);
+                }
+
                 config.set('last_image', response.id);
                 $('#page')[0].scrollTop = 0;
             },
@@ -80,13 +88,13 @@ elementReady('#shoujo').then(function () {
             },
             handleFile: function (file) {
                 this.loading = true;
+                this.file = file;
                 if (config.get('last_file') !== file) {
                     config.set('last_image', false);
                 }
                 this.reset(file);
                 this.$http.get('/?file=' + file).then(() => {
                     config.set('last_file', file);
-                    this.file = file;
                     this.getImagePath();
                     this.fetchImages();
                     this.loading = false;
