@@ -9,27 +9,14 @@ const configWindow = require('./shoujo/public/js/config-window');
 const Config = require('electron-config');
 const config = new Config();
 const eventEmitter = require('./shoujo/public/js/event');
-const unzip = require('unzip2');
-const fs = require('fs');
+const archive = require('./shoujo/public/js/archive');
 
 const file = function () {
     let arg = process.argv[2] || process.argv[1];
     return (arg && arg !== '.') ? arg : false;
 }();
 
-const dir = __dirname + `/.${file}/`;
-if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
-}
-fs.createReadStream(file)
-    .pipe(unzip.Parse())
-    .on('entry', function (entry) {
-        var fileName = path.basename(entry.path);
-        var type = entry.type;
-        if (type == "File") {
-            entry.pipe(fs.createWriteStream(dir + fileName));
-        }
-    });
+archive.unpack(file);
 
 let rq = null;
 let mainWindow = null;
