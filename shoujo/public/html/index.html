@@ -8,6 +8,10 @@
 <body>
 <div id="shoujo">
 
+    <div v-if="loading" id="loadingFile">
+        <a href="#" class="link">Loading...</a>
+    </div>
+
     <div v-if="!file" id="openFile">
         <a href="#" v-on:click.prevent="openFile" class="link">Open File</a>
     </div>

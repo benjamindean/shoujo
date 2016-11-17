@@ -16,7 +16,7 @@
     "deb64": "electron-installer-debian --src dist/$npm_package_name-linux-x64/ --arch amd64 --config configs/deb.json"
   },
   "dependencies": {
-    "electron": "^1.4.6",
+    "electron": "^1.4.7",
     "electron-config": "^0.2.1",
     "electron-context-menu": "^0.6.0",
     "electron-dl": "^1.5.0",
@@ -24,7 +24,7 @@
     "element-ready": "*",
     "node-notifier": "^4.6.1",
     "request-promise": "*",
-    "vue": "^2.0.5",
+    "vue": "^2.0.7",
     "vue-resource": "^1.0.3"
   },
   "devDependencies": {

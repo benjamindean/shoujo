@@ -15,6 +15,7 @@ var glob = remote.getGlobal('shared');
 const initialState = function () {
     return {
         file: glob.file,
+        loading: true,
         images: [],
         image_path: '',
         last_image: config.get('last_image') || 0,
@@ -33,6 +34,7 @@ elementReady('#shoujo').then(function () {
             init: function () {
                 this.getImagePath();
                 this.fetchImages();
+                this.loading = false;
             },
             handleAttributes: function (response) {
                 if(!this.file) return;
@@ -53,9 +55,7 @@ elementReady('#shoujo').then(function () {
             },
             fetchImages: function () {
                 this.$http.get('/list').then((response) => {
-                    if(this.images.length == response.body.length) return;
                     this.images = response.body;
-                    this.fetchImages();
                 }, (response) => {
                     console.log(response);
                 });
@@ -72,6 +72,7 @@ elementReady('#shoujo').then(function () {
                 });
             },
             loadFile: function (file) {
+                this.loading = true;
                 this.reset();
                 return this.$http.get('/?file=' + file);
             },
@@ -125,6 +126,5 @@ ipcRenderer.on('load-file', function (event, file) {
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {
-    if (!vm) return;
     vm.toggleFullScreen(state);
 });
