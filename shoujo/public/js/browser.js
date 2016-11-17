@@ -24,20 +24,14 @@ const initialState = function () {
 };
 
 elementReady('#shoujo').then(function () {
-    pageWidth = $('#page')[0].style.width;
     vm = new Vue({
         el: '#shoujo',
         data: function () {
             return initialState();
         },
         methods: {
-            init: function () {
-                this.getImagePath();
-                this.fetchImages();
-                this.loading = false;
-            },
             handleAttributes: function (response) {
-                if(!this.file) return;
+                if (!this.file) return;
                 let main_image = $('#mainImage')[0];
                 main_image.setAttribute('data-id', response.id);
                 main_image.setAttribute('data-name', response.name);
@@ -49,38 +43,24 @@ elementReady('#shoujo').then(function () {
                 if (!id) return;
                 this.$http.get(url + encodeURI(id)).then((response) => {
                     this.handleAttributes(response.body);
-                }, (response) => {
-                    console.log(response);
                 });
             },
             fetchImages: function () {
                 this.$http.get('/list').then((response) => {
                     this.images = response.body;
-                }, (response) => {
-                    console.log(response);
                 });
             },
-            reset: function () {
+            reset: function (file) {
                 this.$http.get('/reset').then((response) => {
-                    config.set('last_image', false);
                     let initialData = initialState();
                     for (let prop in initialData) {
                         this[prop] = initialData[prop];
                     }
-                }, (response) => {
-                    console.log(response);
                 });
-            },
-            loadFile: function (file) {
-                this.loading = true;
-                this.reset();
-                return this.$http.get('/?file=' + file);
             },
             getImagePath: function () {
                 this.$http.get('/get-image-path').then((response) => {
                     this.image_path = response.body;
-                }, (response) => {
-                    console.log(response);
                 });
             },
             onClickThumb: function (e) {
@@ -93,17 +73,22 @@ elementReady('#shoujo').then(function () {
                 this.processRequest(`${globalConfig.host}/image/next/`, id);
                 this.active_image++;
             },
-            toggleFullScreen: function (state) {
-                if(!this.file) return;
-                $('#toolbar')[0].style.display = state ? "none" : "flex";
-                $('#thumbnails')[0].style.display = state ? "none" : "block";
-                $('#page')[0].style.width = state ? "100%" : pageWidth;
+            toggleFullScreen: function () {
+                if (!this.file) return;
+                $('body')[0].classList.toggle('fullscreen');
             },
             handleFile: function (file) {
-                this.loadFile(file).then((response) => {
+                if (config.get('last_file') !== file) {
+                    config.set('last_image', false);
+                }
+                this.loading = true;
+                this.reset(file);
+                this.$http.get('/?file=' + file).then(() => {
                     config.set('last_file', file);
                     this.file = file;
-                    this.init();
+                    this.getImagePath();
+                    this.fetchImages();
+                    this.loading = false;
                 });
             },
             openConfig: function () {
@@ -125,6 +110,6 @@ ipcRenderer.on('load-file', function (event, file) {
     vm.handleFile(file);
 });
 
-ipcRenderer.on('toggle-full-screen', function (event, state) {
-    vm.toggleFullScreen(state);
+ipcRenderer.on('toggle-full-screen', function () {
+    vm.toggleFullScreen();
 });

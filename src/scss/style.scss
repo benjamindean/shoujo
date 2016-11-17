@@ -40,3 +40,15 @@ html, body {
     font-size: xx-large;
   }
 }
+
+.fullscreen {
+  #toolbar {
+    display: none;
+  }
+  #thumbnails {
+    display: none;
+  }
+  #page {
+    width: 100%;
+  }
+}
