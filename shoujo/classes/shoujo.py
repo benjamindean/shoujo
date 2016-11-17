@@ -4,7 +4,8 @@ import os
 import shutil
 from zipfile import ZipFile
 
-class Shoujo():
+
+class Shoujo:
     def __init__(self):
         self.image_list = list()
         self.image_list_size = None
@@ -64,7 +65,7 @@ class Shoujo():
         })
 
     def clear_cache(self):
-        if(self.volume_path): shutil.rmtree(self.volume_path)
+        if self.volume_path: shutil.rmtree(self.volume_path)
 
     def reset(self):
         self.clear_cache()

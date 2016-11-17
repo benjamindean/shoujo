@@ -19,7 +19,7 @@ def hello():
     file = request.args.get('file')
     if file:
         shoujo_cls.extract_file(file)
-        return ('', 204)
+        return '', 204
     else:
         return app.send_static_file('html/index.html')
 
@@ -42,6 +42,7 @@ def get_image_list():
                     status=200,
                     mimetype="application/json")
 
+
 @app.route('/get-image-path')
 def get_image_path():
     return shoujo_cls.volume_path
@@ -50,7 +51,7 @@ def get_image_path():
 @app.route('/reset')
 def reset():
     shoujo_cls.reset()
-    return ('', 204)
+    return '', 204
 
 
 @app.route('/image/next/<int:image_id>')

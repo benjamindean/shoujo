@@ -8,7 +8,6 @@ const config = new Config();
 const Vue = require('vue/dist/vue.js').use(require('vue-resource'));
 const $ = document.querySelectorAll.bind(document);
 
-var pageWidth = 0;
 var vm = null;
 var glob = remote.getGlobal('shared');
 

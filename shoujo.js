@@ -5,7 +5,6 @@ const path = require('path');
 const appMenu = require('./shoujo/public/js/menu');
 const appConfig = require('./shoujo/public/js/config');
 const configWindow = require('./shoujo/public/js/config-window');
-const contextMenu = require('./shoujo/public/js/context-menu')();
 const Config = require('electron-config');
 const config = new Config();
 const eventEmitter = require('./shoujo/public/js/event');
@@ -106,6 +105,7 @@ app.on('ready', function () {
         mainWindow.loadURL(mainAddr);
         mainWindow.webContents.openDevTools();
         Menu.setApplicationMenu(appMenu.template);
+        require('./shoujo/public/js/context-menu')();
 
         mainWindow.on('closed', function () {
             configInstance = null;
