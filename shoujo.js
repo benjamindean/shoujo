@@ -121,6 +121,9 @@ app.on('ready', function () {
 
         eventEmitter.on('open-file', openFile);
         eventEmitter.on('open-config', openConfig);
+        eventEmitter.on('extract-started', function (data) {
+            mainWindow.webContents.send('list-processing', data);
+        });
         eventEmitter.on('extract-finished', function (data) {
             mainWindow.webContents.send('list-ready', data);
         });

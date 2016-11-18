@@ -22,6 +22,9 @@ const unpack = function (file) {
     if (!fs.existsSync(data.dir)) fs.mkdirSync(data.dir);
     let idx = 0;
     fs.createReadStream(file)
+        .on('open', function () {
+            eventEmitter.emit('extract-started', data);
+        })
         .pipe(unzip.Parse())
         .on('entry', function (entry) {
             let fileName = path.basename(entry.path);
