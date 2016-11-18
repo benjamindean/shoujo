@@ -27,7 +27,7 @@ const createWindow = function () {
         show: false
     });
 
-    configWindow.loadURL(`${appConfig.host}/config`);
+    configWindow.loadURL('file://' + path.join(__dirname, 'public/html/config.html'));
 
     return configWindow;
 };

@@ -3,28 +3,22 @@
 const {Menu, BrowserWindow, ipcMain, app, electron, dialog} = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
-const appMenu = require('./shoujo/public/js/menu');
-const appConfig = require('./shoujo/public/js/config');
-const configWindow = require('./shoujo/public/js/config-window');
+const appMenu = require('./shoujo/menu');
+const appConfig = require('./shoujo/config');
+const configWindow = require('./shoujo/config-window');
 const Config = require('electron-config');
 const config = new Config();
-const eventEmitter = require('./shoujo/public/js/event');
-const archive = require('./shoujo/public/js/archive');
+const eventEmitter = require('./shoujo/event');
+const archive = require('./shoujo/archive');
 
 const file = function () {
     let arg = process.argv[2] || process.argv[1];
     return (arg && arg !== '.') ? arg : false;
 }();
 
-archive.unpack(file);
-
 let rq = null;
 let mainWindow = null;
 let configInstance = null;
-
-global.shared = {
-    file: file
-};
 
 const instanceRunning = app.makeSingleInstance(() => {
     if (mainWindow) {
@@ -87,10 +81,6 @@ app.on('window-all-closed', function () {
 });
 
 app.on('ready', function () {
-    var subpy = require('child_process').spawn('python', [path.join(__dirname, 'shoujo/server.py')]);
-    rq = require('request-promise');
-    var mainAddr = appConfig.host;
-
     var openWindow = function () {
         mainWindow = new BrowserWindow({
             width: 800,
@@ -99,22 +89,22 @@ app.on('ready', function () {
             minHeight: 600,
             center: true,
             webPreferences: {
-                preload: path.join(__dirname, 'shoujo/public/js/browser.js'),
+                preload: path.join(__dirname, 'shoujo/browser.js'),
                 nodeIntegration: false,
                 webSecurity: false
             },
             icon: path.join(__dirname, 'resources/icons/icon.png')
         });
 
-        mainWindow.loadURL(mainAddr);
+        mainWindow.loadURL('file://' + path.join(__dirname, 'shoujo/public/html/index.html'));
         if (isDev) mainWindow.webContents.openDevTools();
         Menu.setApplicationMenu(appMenu.template);
-        require('./shoujo/public/js/context-menu')();
+        require('./shoujo/context-menu')();
 
         mainWindow.on('closed', function () {
+            archive.delete();
             configInstance = null;
             mainWindow = null;
-            subpy.kill('SIGINT');
         });
 
         mainWindow.on('enter-full-screen', function () {
@@ -125,22 +115,21 @@ app.on('ready', function () {
             this.webContents.send('toggle-full-screen', false);
         });
 
+        mainWindow.webContents.on('did-finish-load', function () {
+            archive.unpack(file);
+        });
+
         eventEmitter.on('open-file', openFile);
         eventEmitter.on('open-config', openConfig);
+        eventEmitter.on('extract-finished', function (data) {
+            mainWindow.webContents.send('list-ready', data);
+        });
 
         ipcMain.on('open-file', openFile);
         ipcMain.on('open-config', openConfig);
 
     };
 
-    const startUp = function () {
-        rq(mainAddr).then(function () {
-            openWindow();
-        }).catch(function (err) {
-            console.log(err);
-        });
-    };
-
-    startUp();
+    openWindow();
 });
 

@@ -5,11 +5,10 @@ const elementReady = require('element-ready');
 const globalConfig = require('./config');
 const Config = require('electron-config');
 const config = new Config();
-const Vue = require('vue/dist/vue.js').use(require('vue-resource'));
+const Vue = require('vue/dist/vue.js');
 const $ = document.querySelectorAll.bind(document);
 
 var vm = null;
-var glob = remote.getGlobal('shared');
 
 const initialState = function () {
     return {
@@ -29,33 +28,26 @@ elementReady('#shoujo').then(function () {
             return initialState();
         },
         methods: {
-            handleAttributes: function (response) {
+            setData: function (data) {
+                this.image_path = data.dir;
+                this.images = data.list;
+            },
+            handleAttributes: function (image) {
                 if (!this.file) return;
-                this.scrollToThumb(response.id);
+                this.scrollToThumb(image.id);
                 let main_image = $('#mainImage')[0];
 
                 let attrs = {
-                    'data-id': response.id,
-                    'data-name': response.name,
-                    'src': `file://${response.path}`
+                    'data-id': image.id,
+                    'data-name': image.name,
+                    'src': `file://${image.path}`
                 };
 
                 for (let key in attrs) {
                     main_image.setAttribute(key, attrs[key]);
                 }
-                config.set('last_image', response.id);
+                config.set('last_image', image.id);
                 $('#page')[0].scrollTop = 0;
-            },
-            processRequest: function (url, id) {
-                if (!id) return;
-                this.$http.get(url + encodeURI(id)).then((response) => {
-                    this.handleAttributes(response.body);
-                });
-            },
-            fetchImages: function () {
-                this.$http.get('/list').then((response) => {
-                    this.images = response.body;
-                });
             },
             reset: function () {
                 let initialData = initialState();
@@ -63,14 +55,11 @@ elementReady('#shoujo').then(function () {
                     this[prop] = initialData[prop];
                 }
             },
-            getImagePath: function () {
-                this.$http.get('/get-image-path').then((response) => {
-                    this.image_path = response.body;
-                });
-            },
             onClickThumb: function (e) {
                 let id = e.target.getAttribute('data-id');
-                this.processRequest(`${globalConfig.host}/image/`, id);
+                let image = this.images[id];
+                if (!image) return;
+                this.handleAttributes(image);
                 this.active_image = id;
             },
             scrollToThumb(id) {
@@ -78,8 +67,10 @@ elementReady('#shoujo').then(function () {
                 document.getElementById("thumbnails").scrollTop -= window.innerHeight / 3;
             },
             onClickImage: function (e) {
-                let id = e.target.getAttribute('data-id');
-                this.processRequest(`${globalConfig.host}/image/next/`, id);
+                let id = parseInt(e.target.getAttribute('data-id')) + 1;
+                let image = this.images[id];
+                if (!image) return;
+                this.handleAttributes(image);
                 this.active_image++;
             },
             toggleFullScreen: function (state) {
@@ -97,11 +88,7 @@ elementReady('#shoujo').then(function () {
                     this.last_image = 0;
                     this.active_image = 0;
                 }
-                this.$http.get('/?file=' + file).then(() => {
-                    this.getImagePath();
-                    this.fetchImages();
-                    this.loading = false;
-                });
+                this.loading = false;
             },
             openConfig: function () {
                 ipcRenderer.send('open-config', true);
@@ -112,12 +99,16 @@ elementReady('#shoujo').then(function () {
         }
     });
 
-    vm.handleFile(glob.file || config.get('last_file'));
+    vm.handleFile(config.get('last_file'));
 
 });
 
 ipcRenderer.on('load-file', function (event, file) {
     vm.handleFile(file);
+});
+
+ipcRenderer.on('list-ready', function (event, data) {
+    vm.setData(data);
 });
 
 ipcRenderer.on('toggle-full-screen', function (event, state) {
