@@ -23,7 +23,7 @@ let configInstance = null;
 const instanceRunning = app.makeSingleInstance(() => {
     if (mainWindow) {
         if (mainWindow.isMinimized()) mainWindow.restore();
-        mainWindow.focus()
+        mainWindow.focus();
     }
 });
 
@@ -44,7 +44,7 @@ const openFile = function () {
         }, function (filePath) {
             if (!filePath) return;
             config.set('fileBrowserPath', path.dirname(filePath[0]));
-            mainWindow.webContents.send('load-file', filePath[0]);
+            handleFile(filePath[0]);
         }
     );
 };
@@ -76,6 +76,11 @@ const openConfig = function () {
     });
 };
 
+const handleFile = function (file) {
+    archive.delete();
+    archive.unpack(file);
+};
+
 app.on('window-all-closed', function () {
     app.quit();
 });
@@ -101,12 +106,6 @@ app.on('ready', function () {
         Menu.setApplicationMenu(appMenu.template);
         require('./shoujo/context-menu')();
 
-        mainWindow.on('closed', function () {
-            archive.delete();
-            configInstance = null;
-            mainWindow = null;
-        });
-
         mainWindow.on('enter-full-screen', function () {
             this.webContents.send('toggle-full-screen', true);
         });
@@ -116,7 +115,7 @@ app.on('ready', function () {
         });
 
         mainWindow.webContents.on('did-finish-load', function () {
-            archive.unpack(file);
+            handleFile(file);
         });
 
         eventEmitter.on('open-file', openFile);
@@ -127,6 +126,12 @@ app.on('ready', function () {
 
         ipcMain.on('open-file', openFile);
         ipcMain.on('open-config', openConfig);
+
+        mainWindow.on('closed', function () {
+            archive.delete();
+            configInstance = null;
+            mainWindow = null;
+        });
 
     };
 

@@ -6,12 +6,19 @@ const unzip = require('unzip2');
 const fs = require('fs');
 
 let data = {
-    list: [],
-    dir: null
+    list: null,
+    dir: null,
+    file: null
 };
 
 const unpack = function (file) {
-    data.dir = __dirname + `/.${file}/`;
+    reset();
+    let inputFileName = path.basename(file);
+    data = {
+        list: [],
+        dir: __dirname + `/.${inputFileName}/`,
+        file: file
+    };
     if (!fs.existsSync(data.dir)) fs.mkdirSync(data.dir);
     let idx = 0;
     fs.createReadStream(file)
@@ -34,7 +41,6 @@ const unpack = function (file) {
 };
 
 
-
 const deleteFolder = function () {
     if (fs.existsSync(data.dir)) {
         fs.readdirSync(data.dir).forEach(function (file, index) {
@@ -46,6 +52,12 @@ const deleteFolder = function () {
             }
         });
         fs.rmdirSync(data.dir);
+    }
+};
+
+const reset = function () {
+    for (let prop in data) {
+        data[prop] = null;
     }
 };
 
