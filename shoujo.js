@@ -14,7 +14,7 @@ const archive = require('./shoujo/archive');
 const file = function () {
     let arg = process.argv[2] || process.argv[1];
     return (arg && arg !== '.') ? arg : false;
-}();
+}() || config.get('last_file');
 
 let rq = null;
 let mainWindow = null;
@@ -77,6 +77,7 @@ const openConfig = function () {
 };
 
 const handleFile = function (file) {
+    if (!file) return;
     archive.delete();
     archive.unpack(file);
 };

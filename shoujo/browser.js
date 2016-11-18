@@ -96,9 +96,6 @@ elementReady('#shoujo').then(function () {
             }
         }
     });
-
-    //vm.handleFile(config.get('last_file'));
-
 });
 
 ipcRenderer.on('list-ready', function (event, data) {
