@@ -99,16 +99,18 @@ elementReady('#shoujo').then(function () {
             }
         }
     });
+
+    ipcRenderer.on('list-processing', function (event, data) {
+        vm.setData(data, 'list-processing');
+    });
+
+    ipcRenderer.on('list-ready', function (event, data) {
+        vm.setData(data, 'list-ready');
+    });
+
+    ipcRenderer.on('toggle-full-screen', function (event, state) {
+        vm.toggleFullScreen(state);
+    });
+
 });
 
-ipcRenderer.on('list-processing', function (event, data) {
-    vm.setData(data, 'list-processing');
-});
-
-ipcRenderer.on('list-ready', function (event, data) {
-    vm.setData(data, 'list-ready');
-});
-
-ipcRenderer.on('toggle-full-screen', function (event, state) {
-    vm.toggleFullScreen(state);
-});
