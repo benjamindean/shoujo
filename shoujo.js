@@ -122,10 +122,10 @@ app.on('ready', function () {
         eventEmitter.on('open-file', openFile);
         eventEmitter.on('open-config', openConfig);
         eventEmitter.on('extract-started', function (data) {
-            mainWindow.webContents.send('list-processing', data);
+            mainWindow.webContents.send('extract-started', data);
         });
         eventEmitter.on('extract-finished', function (data) {
-            mainWindow.webContents.send('list-ready', data);
+            mainWindow.webContents.send('extract-finished', data);
         });
 
         ipcMain.on('open-file', openFile);

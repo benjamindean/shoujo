@@ -33,7 +33,7 @@ elementReady('#shoujo').then(function () {
                 this.image_path = data.dir;
                 this.images = data.list;
                 this.file = data.file;
-                if (event === 'list-processing') {
+                if (event === 'extract-started') {
                     this.loading = true;
                 } else {
                     if (config.get('last_file') !== data.file) {
@@ -100,12 +100,12 @@ elementReady('#shoujo').then(function () {
         }
     });
 
-    ipcRenderer.on('list-processing', function (event, data) {
-        vm.setData(data, 'list-processing');
+    ipcRenderer.on('extract-started', function (event, data) {
+        vm.setData(data, 'extract-started');
     });
 
-    ipcRenderer.on('list-ready', function (event, data) {
-        vm.setData(data, 'list-ready');
+    ipcRenderer.on('extract-finished', function (event, data) {
+        vm.setData(data, 'extract-finished');
     });
 
     ipcRenderer.on('toggle-full-screen', function (event, state) {
