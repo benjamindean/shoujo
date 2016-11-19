@@ -22,6 +22,7 @@ const initialState = function () {
 };
 
 elementReady('#shoujo').then(function () {
+    ipcRenderer.send('shoujo-ready', true);
     vm = new Vue({
         el: '#shoujo',
         data: function () {
