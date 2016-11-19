@@ -4,6 +4,7 @@ const eventEmitter = require('./event');
 const path = require('path');
 const unzip = require('unzip2');
 const fs = require('fs');
+const os = require('os');
 
 let data = {
     list: null,
@@ -16,7 +17,7 @@ const unpack = function (file) {
     let inputFileName = path.basename(file);
     data = {
         list: [],
-        dir: __dirname + `/.${inputFileName}/`,
+        dir: os.tmpdir() + `/.${inputFileName}/`,
         file: file
     };
     if (!fs.existsSync(data.dir)) fs.mkdirSync(data.dir);
@@ -63,7 +64,6 @@ const reset = function () {
         data[prop] = null;
     }
 };
-
 
 module.exports = {
     unpack: unpack,
