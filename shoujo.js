@@ -78,7 +78,7 @@ const openConfig = function () {
 
 const handleFile = function (file) {
     if (!file) return;
-    archive.delete();
+    archive.deleteFolder();
     archive.unpack(file);
 };
 
@@ -132,7 +132,7 @@ app.on('ready', function () {
         ipcMain.on('open-config', openConfig);
 
         mainWindow.on('closed', function () {
-            archive.delete();
+            archive.deleteFolder();
             configInstance = null;
             mainWindow = null;
         });

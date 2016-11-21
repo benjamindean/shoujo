@@ -6,67 +6,69 @@ const unzip = require('unzip2');
 const fs = require('fs');
 const os = require('os');
 
-let data = {
-    list: null,
-    dir: null,
-    file: null
-};
+let instance = null;
 
-const unpack = function (file) {
-    reset();
-    let inputFileName = path.basename(file);
-    data = {
-        list: [],
-        dir: os.tmpdir() + `/.${inputFileName}/`,
-        file: file
-    };
-    if (!fs.existsSync(data.dir)) fs.mkdirSync(data.dir);
-    let idx = 0;
-    fs.createReadStream(file)
-        .on('open', function () {
-            eventEmitter.emit('extract-started', data);
-        })
-        .pipe(unzip.Parse())
-        .on('entry', function (entry) {
-            let fileName = path.basename(entry.path);
-            let type = entry.type;
-            if (type == "File") {
-                data.list.push({
-                    id: idx++,
-                    name: fileName,
-                    path: data.dir + fileName
-                });
-                entry.pipe(fs.createWriteStream(data.dir + fileName));
-            }
-        })
-        .on('close', function () {
-            eventEmitter.emit('extract-finished', data);
-        });
-};
+class Archive {
 
+    constructor() {
+        if (!instance) {
+            instance = this;
+        }
+        this.data = {
+            list: null,
+            dir: null,
+            file: null
+        };
+        return instance;
+    }
 
-const deleteFolder = function () {
-    if (fs.existsSync(data.dir)) {
-        fs.readdirSync(data.dir).forEach(function (file, index) {
-            var curPath = data.dir + "/" + file;
-            if (fs.lstatSync(curPath).isDirectory()) {
-                deleteFolderRecursive(curPath);
-            } else {
+    unpack(file) {
+        this.reset();
+        let inputFileName = path.basename(file);
+        this.data = {
+            list: [],
+            dir: os.tmpdir() + `/.${inputFileName}/`,
+            file: file
+        };
+        if (!fs.existsSync(this.data.dir)) fs.mkdirSync(this.data.dir);
+        let idx = 0;
+        fs.createReadStream(file)
+            .on('open', () => {
+                eventEmitter.emit('extract-started', this.data);
+            })
+            .pipe(unzip.Parse())
+            .on('entry', (entry) => {
+                let fileName = path.basename(entry.path);
+                let type = entry.type;
+                if (type == "File") {
+                    this.data.list.push({
+                        id: idx++,
+                        name: fileName,
+                        path: this.data.dir + fileName
+                    });
+                    entry.pipe(fs.createWriteStream(this.data.dir + fileName));
+                }
+            })
+            .on('close', () => {
+                eventEmitter.emit('extract-finished', this.data);
+            });
+    }
+
+    deleteFolder() {
+        if (fs.existsSync(this.data.dir)) {
+            fs.readdirSync(this.data.dir).forEach((file, index) => {
+                var curPath = this.data.dir + "/" + file;
                 fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(data.dir);
+            });
+            fs.rmdirSync(this.data.dir);
+        }
     }
-};
 
-const reset = function () {
-    for (let prop in data) {
-        data[prop] = null;
+    reset() {
+        for (let prop in this.data) {
+            this.data[prop] = null;
+        }
     }
-};
+}
 
-module.exports = {
-    unpack: unpack,
-    data: data,
-    delete: deleteFolder
-};
+module.exports = new Archive();

@@ -1,7 +1,6 @@
 'use strict';
 
 const {BrowserWindow} = require('electron');
-const appConfig = require('./config');
 const path = require('path');
 
 const size = {
