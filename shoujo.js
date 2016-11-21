@@ -16,7 +16,6 @@ const file = function () {
     return (arg && arg !== '.') ? arg : false;
 }() || config.get('last_file');
 
-let rq = null;
 let mainWindow = null;
 let configInstance = null;
 

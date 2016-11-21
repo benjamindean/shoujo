@@ -3,36 +3,42 @@
 const {BrowserWindow} = require('electron');
 const path = require('path');
 
-const size = {
-    width: 400,
-    height: 300
-};
+let instance = null;
 
-const createWindow = function () {
-    let configWindow = new BrowserWindow({
-        width: size.width,
-        height: size.height,
-        minWidth: size.width,
-        minHeight: size.height,
-        webPreferences: {
-            preload: path.join(__dirname, 'browser.js'),
-            nodeIntegration: false,
-            webSecurity: false
-        },
-        skipTaskbar: true,
-        fullscreenable: false,
-        resizable: false,
-        center: true,
-        show: false
-    });
+class ConfigWindow {
 
-    configWindow.loadURL('file://' + path.join(__dirname, 'public/html/config.html'));
+    constructor() {
+        if (!instance) {
+            instance = this;
+        }
+        this.size = {
+            width: 400,
+            height: 300
+        };
+        this.opts = {
+            width: this.size.width,
+            height: this.size.height,
+            minWidth: this.size.width,
+            minHeight: this.size.height,
+            webPreferences: {
+                preload: path.join(__dirname, 'browser.js'),
+                nodeIntegration: false,
+                webSecurity: false
+            },
+            skipTaskbar: true,
+            fullscreenable: false,
+            resizable: false,
+            center: true,
+            show: false
+        };
+        return instance;
+    }
 
-    return configWindow;
-};
+    create() {
+        let configWindow = new BrowserWindow(this.opts);
+        configWindow.loadURL('file://' + path.join(__dirname, 'public/html/config.html'));
+        return configWindow;
+    }
+}
 
-
-module.exports = {
-    create: createWindow,
-    size: size
-};
+module.exports = new ConfigWindow();
