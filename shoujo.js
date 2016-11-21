@@ -114,7 +114,7 @@ app.on('ready', function () {
             this.webContents.send('toggle-full-screen', false);
         });
 
-        ipcMain.on('shoujo-ready', function () {
+        ipcMain.once('shoujo-ready', function () {
             handleFile(file);
         });
 

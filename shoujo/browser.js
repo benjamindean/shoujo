@@ -2,7 +2,6 @@
 
 const {ipcRenderer, remote} = require('electron');
 const elementReady = require('element-ready');
-const globalConfig = require('./config');
 const Config = require('electron-config');
 const config = new Config();
 const Vue = require('vue/dist/vue.js');
