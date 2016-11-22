@@ -35,10 +35,37 @@ class ConfigWindow {
         return instance;
     }
 
-    create() {
+    open(mainWindow) {
+        if (this.windowInstance) {
+            if (this.windowInstance.isMinimized()) {
+                this.windowInstance.restore();
+            }
+            return;
+        }
+
         this.windowInstance = new BrowserWindow(this.opts);
         this.windowInstance.loadURL('file://' + path.join(__dirname, 'public/html/config.html'));
-        return this.windowInstance;
+
+        let pos = mainWindow.getPosition();
+        let size = mainWindow.getSize();
+
+        this.windowInstance.setParentWindow(mainWindow);
+        this.windowInstance.setPosition(
+            pos[0] + Math.round((size[0] / 2) - (this.size.width / 2)),
+            pos[1] + Math.round((size[1] / 2) - (this.size.height / 2))
+        );
+
+        this.attachEvents();
+    }
+
+    attachEvents() {
+        this.windowInstance.on('close', () => {
+            this.windowInstance = null;
+        });
+
+        this.windowInstance.once('ready-to-show', () => {
+            this.windowInstance.show();
+        });
     }
 
 }

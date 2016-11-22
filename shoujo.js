@@ -17,7 +17,6 @@ class Shoujo {
         let mainWindowInstance = new mainWindow(this.file);
         mainWindowInstance.open();
         this.mainWindow = mainWindowInstance.window;
-        this.configInstance = null;
     }
 
     static getFile() {
@@ -50,43 +49,16 @@ class Shoujo {
             }
         );
     }
-
-    openConfig() {
-        if (this.configInstance && this.configInstance.isMinimized()) {
-            this.configInstance.restore();
-            return;
-        }
-        if (this.configInstance) return;
-
-        let pos = this.mainWindow.getPosition();
-        let size = this.mainWindow.getSize();
-        let instance = configWindow.create();
-
-        instance.setParentWindow(this.mainWindow);
-        instance.setPosition(
-            pos[0] + Math.round((size[0] / 2) - (configWindow.size.width / 2)),
-            pos[1] + Math.round((size[1] / 2) - (configWindow.size.height / 2))
-        );
-
-        instance.on('close', () => {
-            this.configInstance = null;
-        });
-
-        instance.once('ready-to-show', () => {
-            this.configInstance = instance;
-            instance.show();
-        });
-    }
 }
 
-// const instanceRunning = app.makeSingleInstance(() => {
-//     if (window.window) {
-//         if (window.window.isMinimized()) window.window.restore();
-//         window.window.focus();
-//     }
-// });
-//
-// if (instanceRunning) app.quit();
+const instanceRunning = app.makeSingleInstance(() => {
+    if (Shoujo.window) {
+        if (Shoujo.window.isMinimized()) Shoujo.window.restore();
+        Shoujo.window.focus();
+    }
+});
+
+if (instanceRunning) app.quit();
 
 app.on('window-all-closed', app.quit);
 app.on('ready', () => {
@@ -97,7 +69,7 @@ app.on('ready', () => {
     });
 
     ipcMain.on('open-config', () => {
-        shoujo.openConfig();
+        configWindow.open(shoujo.mainWindow);
     });
 
     ipcMain.on('open-file', () => {
