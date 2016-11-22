@@ -104,9 +104,9 @@ elementReady('#shoujo').then(function () {
         vm.setData(data, 'extract-started');
     });
 
-    // ipcRenderer.once('item-added', function (event, data) {
-    //     vm.setData(null, 'item-added');
-    // });
+    ipcRenderer.once('item-added', function (event, data) {
+        vm.loading = false;
+    });
 
     ipcRenderer.on('item-added', function (event, data) {
         vm.images.push(data);
