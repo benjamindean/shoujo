@@ -1,143 +1,125 @@
 'use strict';
 
-const {Menu, BrowserWindow, ipcMain, app, electron, dialog} = require('electron');
-const isDev = require('electron-is-dev');
-const path = require('path');
-const appMenu = require('./shoujo/menu');
-const appConfig = require('./shoujo/config');
-const configWindow = require('./shoujo/config-window');
+const {app, electron, dialog, ipcMain} = require('electron');
 const Config = require('electron-config');
 const config = new Config();
-const eventEmitter = require('./shoujo/event');
+const appConfig = require('./shoujo/config');
+const configWindow = require('./shoujo/config-window');
 const archive = require('./shoujo/archive');
+const mainWindow = require('./shoujo/main-window');
+const eventEmitter = require('./shoujo/event');
+const path = require('path');
 
-const file = function () {
-    let arg = process.argv[2] || process.argv[1];
-    return (arg && arg !== '.') ? arg : false;
-}() || config.get('last_file');
+class Shoujo {
 
-let mainWindow = null;
-let configInstance = null;
-
-const instanceRunning = app.makeSingleInstance(() => {
-    if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore();
-        mainWindow.focus();
+    constructor() {
+        this.file = Shoujo.getFile();
+        let mainWindowInstance = new mainWindow(this.file);
+        mainWindowInstance.open();
+        this.mainWindow = mainWindowInstance.window;
+        this.configInstance = null;
     }
-});
 
-if (instanceRunning) app.quit();
+    static getFile() {
+        let arg = process.argv[2] || process.argv[1];
+        return ((arg && arg !== '.') ? arg : false) || config.get('last_file');
+    }
 
-const openFile = function () {
-    dialog.showOpenDialog(
-        {
-            title: 'Open File',
-            properties: ['openFile'],
-            defaultPath: config.get('fileBrowserPath'),
-            filters: [
-                {
-                    name: 'Archives',
-                    extensions: appConfig.supportedFormats
-                },
-            ]
-        }, function (filePath) {
-            if (!filePath) return;
-            config.set('fileBrowserPath', path.dirname(filePath[0]));
-            handleFile(filePath[0]);
+    handleFile(file = this.file) {
+        if (!file) return;
+        archive.deleteFolder();
+        archive.unpack(file);
+    }
+
+    openFile() {
+        dialog.showOpenDialog(
+            {
+                title: 'Open File',
+                properties: ['openFile'],
+                defaultPath: config.get('fileBrowserPath'),
+                filters: [
+                    {
+                        name: 'Archives',
+                        extensions: appConfig.supportedFormats
+                    },
+                ]
+            }, (filePath) => {
+                if (!filePath) return;
+                config.set('fileBrowserPath', path.dirname(filePath[0]));
+                this.handleFile(filePath[0]);
+            }
+        );
+    }
+
+    openConfig() {
+        if (this.configInstance && this.configInstance.isMinimized()) {
+            this.configInstance.restore();
+            return;
         }
-    );
-};
+        if (this.configInstance) return;
 
-const openConfig = function () {
-    if (configInstance && configInstance.isMinimized()) {
-        configInstance.restore();
-        return;
+        let pos = this.mainWindow.getPosition();
+        let size = this.mainWindow.getSize();
+        let instance = configWindow.create();
+
+        instance.setParentWindow(this.mainWindow);
+        instance.setPosition(
+            pos[0] + Math.round((size[0] / 2) - (configWindow.size.width / 2)),
+            pos[1] + Math.round((size[1] / 2) - (configWindow.size.height / 2))
+        );
+
+        instance.on('close', () => {
+            this.configInstance = null;
+        });
+
+        instance.once('ready-to-show', () => {
+            this.configInstance = instance;
+            instance.show();
+        });
     }
-    if (configInstance) return;
+}
 
-    let pos = mainWindow.getPosition();
-    let size = mainWindow.getSize();
-    let window = configWindow.create();
+// const instanceRunning = app.makeSingleInstance(() => {
+//     if (window.window) {
+//         if (window.window.isMinimized()) window.window.restore();
+//         window.window.focus();
+//     }
+// });
+//
+// if (instanceRunning) app.quit();
 
-    window.setParentWindow(mainWindow);
-    window.setPosition(
-        pos[0] + Math.round((size[0] / 2) - (configWindow.size.width / 2)),
-        pos[1] + Math.round((size[1] / 2) - (configWindow.size.height / 2))
-    );
+app.on('window-all-closed', app.quit);
+app.on('ready', () => {
+    const shoujo = new Shoujo();
 
-    window.on('close', () => {
-        configInstance = null;
+    ipcMain.once('shoujo-ready', () => {
+        shoujo.handleFile();
     });
 
-    window.once('ready-to-show', () => {
-        configInstance = window;
-        window.show();
+    ipcMain.on('open-config', () => {
+        shoujo.openConfig();
     });
-};
 
-const handleFile = function (file) {
-    if (!file) return;
-    archive.deleteFolder();
-    archive.unpack(file);
-};
+    ipcMain.on('open-file', () => {
+        shoujo.openFile();
+    });
 
-app.on('window-all-closed', function () {
-    app.quit();
+    eventEmitter.on('open-file', () => {
+        shoujo.openFile();
+    });
+
+    eventEmitter.on('open-config', () => {
+        shoujo.openConfig();
+    });
+
+    eventEmitter.on('extract-started', (data) => {
+        shoujo.mainWindow.webContents.send('extract-started', data);
+    });
+
+    eventEmitter.on('extract-finished', (data) => {
+        shoujo.mainWindow.webContents.send('extract-finished', data);
+    });
 });
 
-app.on('ready', function () {
-    var openWindow = function () {
-        mainWindow = new BrowserWindow({
-            width: 800,
-            height: 600,
-            minWidth: 800,
-            minHeight: 600,
-            center: true,
-            webPreferences: {
-                preload: path.join(__dirname, 'shoujo/browser.js'),
-                nodeIntegration: false,
-                webSecurity: false
-            },
-            icon: path.join(__dirname, 'resources/icons/icon.png')
-        });
 
-        mainWindow.loadURL('file://' + path.join(__dirname, 'shoujo/public/html/index.html'));
-        if (isDev) mainWindow.webContents.openDevTools();
-        Menu.setApplicationMenu(appMenu.template);
-        require('./shoujo/context-menu')();
-
-        mainWindow.on('enter-full-screen', function () {
-            this.webContents.send('toggle-full-screen', true);
-        });
-
-        mainWindow.on('leave-full-screen', function () {
-            this.webContents.send('toggle-full-screen', false);
-        });
-
-        ipcMain.once('shoujo-ready', function () {
-            handleFile(file);
-        });
-
-        eventEmitter.on('open-file', openFile);
-        eventEmitter.on('open-config', openConfig);
-        eventEmitter.on('extract-started', function (data) {
-            mainWindow.webContents.send('extract-started', data);
-        });
-        eventEmitter.on('extract-finished', function (data) {
-            mainWindow.webContents.send('extract-finished', data);
-        });
-
-        ipcMain.on('open-file', openFile);
-        ipcMain.on('open-config', openConfig);
-
-        mainWindow.on('closed', function () {
-            archive.deleteFolder();
-            configInstance = null;
-            mainWindow = null;
-        });
-
-    };
-
-    openWindow();
-});
 

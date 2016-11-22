@@ -66,7 +66,9 @@ class Archive {
 
     reset() {
         for (let prop in this.data) {
-            this.data[prop] = null;
+            if (this.data.hasOwnProperty(prop)) {
+                this.data[prop] = null;
+            }
         }
     }
 }

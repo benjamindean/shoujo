@@ -31,14 +31,16 @@ class ConfigWindow {
             center: true,
             show: false
         };
+        this.windowInstance = null;
         return instance;
     }
 
     create() {
-        let configWindow = new BrowserWindow(this.opts);
-        configWindow.loadURL('file://' + path.join(__dirname, 'public/html/config.html'));
-        return configWindow;
+        this.windowInstance = new BrowserWindow(this.opts);
+        this.windowInstance.loadURL('file://' + path.join(__dirname, 'public/html/config.html'));
+        return this.windowInstance;
     }
+
 }
 
 module.exports = new ConfigWindow();
