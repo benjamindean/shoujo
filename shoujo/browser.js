@@ -1,6 +1,6 @@
 'use strict';
 
-const {ipcRenderer, remote} = require('electron');
+const {ipcRenderer} = require('electron');
 const elementReady = require('element-ready');
 const Config = require('electron-config');
 const config = new Config();

@@ -16,7 +16,6 @@ class MainWindow {
         }
         this.file = file;
         this.window = null;
-        this.configInstance = null;
         this.opts = {
             width: 800,
             height: 600,
