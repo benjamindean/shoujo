@@ -41,12 +41,19 @@ class Archive {
                 let fileName = path.basename(entry.path);
                 let type = entry.type;
                 if (type == "File") {
-                    this.data.list.push({
+                    let item = {
                         id: idx++,
                         name: fileName,
                         path: this.data.dir + fileName
-                    });
-                    entry.pipe(fs.createWriteStream(this.data.dir + fileName));
+                    };
+                    this.data.list.push(item);
+                    entry.pipe(
+                        fs.createWriteStream(this.data.dir + fileName)
+                            .on('close', () => {
+                                eventEmitter.emit('item-added', item);
+                            })
+                    );
+
                 }
             })
             .on('close', () => {

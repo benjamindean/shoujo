@@ -84,6 +84,10 @@ app.on('ready', () => {
         shoujo.openConfig();
     });
 
+    eventEmitter.on('item-added', (data) => {
+        shoujo.mainWindow.webContents.send('item-added', data);
+    });
+
     eventEmitter.on('extract-started', (data) => {
         shoujo.mainWindow.webContents.send('extract-started', data);
     });
