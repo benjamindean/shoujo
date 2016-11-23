@@ -82,7 +82,7 @@ app.on('ready', () => {
     });
 
     eventEmitter.on('open-config', () => {
-        shoujo.openConfig();
+        configWindow.open(shoujo.mainWindow);
     });
 
     eventEmitter.on('item-added', (data) => {
