@@ -9,6 +9,7 @@ const archive = require('./shoujo/archive');
 const mainWindow = require('./shoujo/main-window');
 const eventEmitter = require('./shoujo/event');
 const path = require('path');
+const fs = require('fs');
 
 class Shoujo {
 
@@ -25,7 +26,7 @@ class Shoujo {
     }
 
     handleFile(file = this.file) {
-        if (!file) return;
+        if (!fs.existsSync(file)) return;
         archive.deleteFolder();
         archive.unpack(file);
     }
