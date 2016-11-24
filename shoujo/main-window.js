@@ -23,6 +23,7 @@ class MainWindow {
             minWidth: 800,
             minHeight: 600,
             center: true,
+            show: false,
             webPreferences: {
                 preload: path.join(__dirname, 'browser.js'),
                 nodeIntegration: false,
@@ -48,6 +49,10 @@ class MainWindow {
     }
 
     attachEvents() {
+        this.window.on('ready-to-show', function () {
+            this.show();
+        });
+
         this.window.on('enter-full-screen', function () {
             this.webContents.send('toggle-full-screen', true);
         });
