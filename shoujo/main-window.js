@@ -5,6 +5,7 @@ const appMenu = require('./menu');
 const Config = require('electron-config');
 const config = new Config();
 const archive = require('./archive');
+const url = require('url');
 
 let instance = null;
 
@@ -34,7 +35,12 @@ class MainWindow {
 
     open() {
         this.window = new BrowserWindow(this.opts);
-        this.window.loadURL('file://' + path.join(__dirname, 'public/html/index.html'));
+        this.window.loadURL(url.format({
+                protocol: 'file',
+                slashes: true,
+                pathname: path.join(__dirname, 'public/html/index.html')
+            })
+        );
         if (isDev) this.window.webContents.openDevTools();
         Menu.setApplicationMenu(appMenu.template);
         require('./context-menu')();
