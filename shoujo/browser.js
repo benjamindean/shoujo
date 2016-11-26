@@ -5,7 +5,7 @@ const elementReady = require('element-ready');
 const Config = require('electron-config');
 const config = new Config();
 const Vue = require('vue/dist/vue.js');
-const $ = document.querySelectorAll.bind(document);
+const $ = document.querySelector.bind(document);
 
 var vm = null;
 
@@ -48,7 +48,7 @@ elementReady('#shoujo').then(function () {
             handleAttributes: function (image) {
                 if (!this.file) return;
                 this.scrollToThumb(image.id);
-                let main_image = $('#mainImage')[0];
+                let main_image = $('#mainImage');
 
                 let attrs = {
                     'data-id': image.id,
@@ -60,7 +60,7 @@ elementReady('#shoujo').then(function () {
                     main_image.setAttribute(key, attrs[key]);
                 }
                 config.set('last_image', image.id);
-                $('#page')[0].scrollTop = 0;
+                $('#page').scrollTop = 0;
             },
             reset: function () {
                 let initialData = initialState();
@@ -88,7 +88,7 @@ elementReady('#shoujo').then(function () {
             },
             toggleFullScreen: function (state) {
                 if (!this.file) return;
-                let body = $('body')[0];
+                let body = $('body');
                 state ? body.classList.add('fullscreen') : body.classList.remove('fullscreen');
             },
             openConfig: function () {
