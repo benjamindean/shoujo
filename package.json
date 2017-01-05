@@ -11,8 +11,9 @@
   },
   "scripts": {
     "start": "electron . test.zip",
-    "build": "npm run build:linux && npm run deb64",
+    "build": "npm run build:linux && npm run build:macos && npm run deb64",
     "build:linux": "electron-packager . --overwrite --out=dist --prune --platform=linux --arch=x64 --app-bundle-id=com.benjaminabel.shoujo --app-version=$npm_package_version --ignore=test.zip",
+    "build:macos": "electron-packager . --overwrite --asar --out=dist --ignore='test.zip' --prune --platform=darwin --arch=x64 --app-bundle-id=com.benjaminabel.shoujo --osx-sign --icon=resources/icons/icon.png --app-version=$npm_package_version && cd dist/Shoujo-darwin-x64 && zip -ryXq9 ../Shoujo-osx-${npm_package_version}.zip Shoujo.app",
     "deb64": "electron-installer-debian --src dist/$npm_package_name-linux-x64/ --arch amd64 --config configs/deb.json"
   },
   "dependencies": {
