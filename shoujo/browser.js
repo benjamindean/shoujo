@@ -68,12 +68,31 @@ elementReady('#shoujo').then(function () {
                     this[prop] = initialData[prop];
                 }
             },
-            onClickThumb: function (e) {
-                let id = e.target.getAttribute('data-id');
+            switchImage: function (id, direction) {
+                switch (direction) {
+                    case 'next':
+                        id++;
+                        this.active_image = id;
+                        break;
+                    case 'prev':
+                        id--;
+                        this.active_image = id;
+                        break;
+                    case 'thumb':
+                        this.active_image = id;
+                        break;
+                    case 'forward':
+                        this.active_image++;
+                        break;
+                }
+
                 let image = this.images[id];
                 if (!image) return;
                 this.handleAttributes(image);
-                this.active_image = id;
+            },
+            onClickThumb: function (e) {
+                let id = e.target.getAttribute('data-id');
+                this.switchImage(id, 'thumb');
             },
             scrollToThumb(id) {
                 document.getElementById("thumb-" + id).scrollIntoView();
@@ -81,10 +100,7 @@ elementReady('#shoujo').then(function () {
             },
             onClickImage: function (e) {
                 let id = parseInt(e.target.getAttribute('data-id')) + 1;
-                let image = this.images[id];
-                if (!image) return;
-                this.handleAttributes(image);
-                this.active_image++;
+                this.switchImage(id, 'forward');
             },
             toggleFullScreen: function (state) {
                 if (!this.file) return;
@@ -117,5 +133,9 @@ elementReady('#shoujo').then(function () {
         vm.toggleFullScreen(state);
     });
 
+    ipcRenderer.on('switch-image', function (event, direction) {
+        let el = $('#mainImage'),
+            id = el ? el.getAttribute('data-id') : false;
+        vm.switchImage(id, direction);
+    });
 });
-

@@ -1,6 +1,6 @@
 'use strict';
 
-const {app, electron, dialog, ipcMain} = require('electron');
+const {app, electron, dialog, ipcMain, globalShortcut} = require('electron');
 const Config = require('electron-config');
 const config = new Config();
 const appConfig = require('./shoujo/config');
@@ -95,6 +95,14 @@ app.on('ready', () => {
 
     eventEmitter.on('extract-finished', (data) => {
         shoujo.mainWindow.webContents.send('extract-finished', data);
+    });
+
+    globalShortcut.register('Right', () => {
+        shoujo.mainWindow.webContents.send('switch-image', 'next');
+    });
+
+    globalShortcut.register('Left', () => {
+        shoujo.mainWindow.webContents.send('switch-image', 'prev');
     });
 });
 
