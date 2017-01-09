@@ -97,6 +97,10 @@ app.on('ready', () => {
         shoujo.mainWindow.webContents.send('extract-finished', data);
     });
 
+    eventEmitter.on('quit', () => {
+        app.quit();
+    });
+
     globalShortcut.register('Right', () => {
         shoujo.mainWindow.webContents.send('switch-image', 'next');
     });

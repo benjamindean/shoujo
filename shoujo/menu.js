@@ -9,10 +9,21 @@ const template = [
         submenu: [
             {
                 label: 'Open',
-                accelerator: 'Ctrl+O',
+                accelerator: 'CommandOrControl+O',
                 enabled: true,
                 click () {
                     eventEmitter.emit('open-file', true);
+                }
+            },
+            {
+                type: 'separator'
+            },
+            {
+                label: 'Quit',
+                accelerator: 'CommandOrControl+Q',
+                enabled: true,
+                click () {
+                    eventEmitter.emit('quit', true);
                 }
             }
         ]
@@ -22,7 +33,7 @@ const template = [
         submenu: [
             {
                 label: 'Settings',
-                accelerator: 'Ctrl+E',
+                accelerator: 'CommandOrControl+E',
                 enabled: true,
                 click () {
                     eventEmitter.emit('open-config', true);
@@ -35,7 +46,7 @@ const template = [
         submenu: [
             {
                 label: 'Reload',
-                accelerator: 'Ctrl+R',
+                accelerator: 'CommandOrControl+R',
                 click (item, focusedWindow) {
                     if (focusedWindow) focusedWindow.reload();
                 }
