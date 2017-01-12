@@ -7,8 +7,8 @@ const config = new Config();
 const Vue = require('vue/dist/vue.js');
 const $ = document.querySelector.bind(document);
 
-let vm = null;
-let main_image = null;
+let vm = null,
+    main_image = null;
 
 const initialState = function () {
     return {
@@ -44,6 +44,7 @@ elementReady('#shoujo').then(function () {
                         this.active_image = 0;
                     }
                     this.loading = false;
+                    this.scrollToThumb(config.get('last_image'));
 
                     main_image = $('#mainImage');
                     main_image.addEventListener("load", function () {
