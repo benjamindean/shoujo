@@ -8,6 +8,7 @@ const Vue = require('vue/dist/vue.js');
 const $ = document.querySelector.bind(document);
 
 let vm = null;
+let main_image = null;
 
 const initialState = function () {
     return {
@@ -43,12 +44,16 @@ elementReady('#shoujo').then(function () {
                         this.active_image = 0;
                     }
                     this.loading = false;
+
+                    main_image = $('#mainImage');
+                    main_image.addEventListener("load", function () {
+                        $('#page').scrollTop = 0;
+                    });
                 }
             },
             handleAttributes: function (image) {
                 if (!this.file) return;
                 this.scrollToThumb(image.id);
-                let main_image = $('#mainImage');
 
                 let attrs = {
                     'data-id': image.id,
@@ -60,7 +65,6 @@ elementReady('#shoujo').then(function () {
                     main_image.setAttribute(key, attrs[key]);
                 }
                 config.set('last_image', image.id);
-                $('#page').scrollTop = 0;
             },
             reset: function () {
                 let initialData = initialState();
