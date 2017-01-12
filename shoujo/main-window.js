@@ -1,4 +1,4 @@
-const {Menu, BrowserWindow, electron} = require('electron');
+const {app, Menu, BrowserWindow, electron} = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const appMenu = require('./menu');
@@ -6,6 +6,7 @@ const Config = require('electron-config');
 const config = new Config();
 const archive = require('./archive');
 const url = require('url');
+const eventEmitter = require('./event');
 
 let instance = null;
 
@@ -49,6 +50,10 @@ class MainWindow {
     }
 
     attachEvents() {
+        eventEmitter.on('extract-started', (data) => {
+           this.window.setTitle(app.getName() + ` - ${data.fileName}`)
+        });
+
         this.window.on('ready-to-show', function () {
             this.show();
         });

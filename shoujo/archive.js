@@ -28,7 +28,8 @@ class Archive {
         this.data = {
             list: [],
             dir: os.tmpdir() + `/.${inputFileName}/`,
-            file: file
+            file: file,
+            fileName: inputFileName.substr(0, inputFileName.lastIndexOf('.'))
         };
         if (!fs.existsSync(this.data.dir)) fs.mkdirSync(this.data.dir);
         let idx = 0;

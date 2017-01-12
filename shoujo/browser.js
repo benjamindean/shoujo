@@ -7,7 +7,7 @@ const config = new Config();
 const Vue = require('vue/dist/vue.js');
 const $ = document.querySelector.bind(document);
 
-var vm = null;
+let vm = null;
 
 const initialState = function () {
     return {
@@ -106,6 +106,7 @@ elementReady('#shoujo').then(function () {
                 if (!this.file) return;
                 let body = $('body');
                 state ? body.classList.add('fullscreen') : body.classList.remove('fullscreen');
+                this.scrollToThumb(this.active_image);
             },
             openConfig: function () {
                 ipcRenderer.send('open-config', true);
