@@ -101,12 +101,18 @@ app.on('ready', () => {
         app.quit();
     });
 
-    globalShortcut.register('Right', () => {
-        shoujo.mainWindow.webContents.send('switch-image', 'next');
+    app.on('browser-window-focus', () => {
+        globalShortcut.register('Right', () => {
+            shoujo.mainWindow.webContents.send('switch-image', 'next');
+        });
+
+        globalShortcut.register('Left', () => {
+            shoujo.mainWindow.webContents.send('switch-image', 'prev');
+        });
     });
 
-    globalShortcut.register('Left', () => {
-        shoujo.mainWindow.webContents.send('switch-image', 'prev');
+    app.on('browser-window-blur', () => {
+        globalShortcut.unregisterAll();
     });
 });
 

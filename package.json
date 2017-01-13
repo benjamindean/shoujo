@@ -17,15 +17,15 @@
     "deb64": "electron-installer-debian --src dist/$npm_package_name-linux-x64/ --arch amd64 --config configs/deb.json"
   },
   "dependencies": {
-    "electron": "^1.4.8",
+    "electron": "^1.4.14",
     "electron-config": "^0.2.1",
-    "electron-dl": "^1.5.0",
+    "electron-dl": "^1.6.0",
     "electron-is-dev": "^0.1.2",
     "electron-settings": "*",
     "element-ready": "*",
     "node-notifier": "^4.6.1",
     "unzip2": "^0.2.5",
-    "vue": "^2.1.3"
+    "vue": "^2.1.8"
   },
   "devDependencies": {
     "electron-debug": "*",
