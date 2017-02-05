@@ -1,6 +1,7 @@
 'use strict';
 
 const {ipcRenderer} = require('electron');
+const electron = require('electron').remote;
 const elementReady = require('element-ready');
 const Config = require('electron-config');
 const config = new Config();
@@ -8,7 +9,8 @@ const Vue = require('vue/dist/vue.js');
 const $ = document.querySelector.bind(document);
 
 let vm = null,
-    main_image = null;
+    main_image = null,
+    electronWindow = electron.getCurrentWindow();
 
 const initialState = function () {
     return {
@@ -16,6 +18,7 @@ const initialState = function () {
         loading: false,
         images: [],
         image_path: '',
+        images_count: 0,
         last_image: config.get('last_image') || 0,
         active_image: config.get('last_image') || 0
     }
@@ -34,6 +37,8 @@ elementReady('#shoujo').then(function () {
                 this.image_path = data.dir;
                 this.images = data.list;
                 this.file = data.file;
+                this.images_count = data.images_count;
+
                 if (event === 'extract-started') {
                     this.loading = true;
                 } else {

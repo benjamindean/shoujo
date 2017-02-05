@@ -29,6 +29,7 @@ class Archive {
             list: [],
             dir: os.tmpdir() + `/.${inputFileName}/`,
             file: file,
+            images_count: 0,
             fileName: inputFileName.substr(0, inputFileName.lastIndexOf('.'))
         };
         if (!fs.existsSync(this.data.dir)) fs.mkdirSync(this.data.dir);
@@ -51,6 +52,7 @@ class Archive {
                     entry.pipe(
                         fs.createWriteStream(this.data.dir + fileName)
                             .on('close', () => {
+                                this.data.images_count++;
                                 eventEmitter.emit('item-added', item);
                             })
                     );
@@ -65,8 +67,7 @@ class Archive {
     deleteFolder() {
         if (fs.existsSync(this.data.dir)) {
             fs.readdirSync(this.data.dir).forEach((file, index) => {
-                var curPath = this.data.dir + "/" + file;
-                fs.unlinkSync(curPath);
+                fs.unlinkSync(this.data.dir + "/" + file);
             });
             fs.rmdirSync(this.data.dir);
         }
