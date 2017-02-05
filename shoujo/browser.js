@@ -9,8 +9,7 @@ const Vue = require('vue/dist/vue.js');
 const $ = document.querySelector.bind(document);
 
 let vm = null,
-    main_image = null,
-    electronWindow = electron.getCurrentWindow();
+    main_image = null;
 
 const initialState = function () {
     return {
@@ -49,6 +48,7 @@ elementReady('#shoujo').then(function () {
                         this.active_image = 0;
                     }
                     this.loading = false;
+                    this.updateCounter();
                     this.scrollToThumb(config.get('last_image'));
 
                     main_image = $('#mainImage');
@@ -98,6 +98,7 @@ elementReady('#shoujo').then(function () {
 
                 let image = this.images[id];
                 if (!image) return;
+                this.updateCounter();
                 this.handleAttributes(image);
             },
             onClickThumb: function (e) {
@@ -123,6 +124,9 @@ elementReady('#shoujo').then(function () {
             },
             openFile: function () {
                 ipcRenderer.send('open-file', true);
+            },
+            updateCounter: function () {
+                $('#image-counter').innerHTML = (this.active_image + 1) + ' / ' + this.images_count;
             }
         }
     });
