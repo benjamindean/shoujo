@@ -3,14 +3,8 @@
 const {BrowserWindow} = require('electron');
 const path = require('path');
 
-let instance = null;
-
 class ConfigWindow {
-
     constructor() {
-        if (!instance) {
-            instance = this;
-        }
         this.size = {
             width: 400,
             height: 300
@@ -32,7 +26,6 @@ class ConfigWindow {
             show: false
         };
         this.windowInstance = null;
-        return instance;
     }
 
     open(mainWindow) {

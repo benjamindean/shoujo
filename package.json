@@ -11,27 +11,38 @@
   },
   "scripts": {
     "start": "electron . test.zip",
+    "watch": "watchify src/js/main.js -t babelify -o shoujo/public/js/bundle.js --debug --verbose",
     "build": "npm run build:linux && npm run build:macos && npm run deb64",
     "build:linux": "electron-packager . --overwrite --out=dist --prune --platform=linux --arch=x64 --app-bundle-id=com.benjaminabel.shoujo --app-version=$npm_package_version --ignore=test.zip",
     "build:macos": "electron-packager . --overwrite --asar --out=dist --ignore='test.zip' --prune --platform=darwin --arch=x64 --app-bundle-id=com.benjaminabel.shoujo --osx-sign --icon=resources/icons/icon.icns --app-version=$npm_package_version && cd dist/Shoujo-darwin-x64 && zip -ryXq9 ../Shoujo-osx-${npm_package_version}.zip Shoujo.app",
     "deb64": "electron-installer-debian --src dist/$npm_package_name-linux-x64/ --arch amd64 --config configs/deb.json"
   },
   "dependencies": {
-    "electron": "^1.5.0",
-    "electron-config": "^0.2.1",
-    "electron-dl": "^1.6.0",
-    "electron-is-dev": "^0.1.2",
-    "electron-settings": "*",
-    "element-ready": "*",
-    "node-notifier": "^4.6.1",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babelify": "^7.3.0",
+    "electron": "^1.8.0",
+    "electron-config": "^1.0.0",
+    "electron-dl": "^1.10.0",
+    "electron-is-dev": "^0.3.0",
+    "electron-settings": "^3.1.1",
+    "element-ready": "^2.1.0",
+    "node-notifier": "^5.1.2",
+    "react-dom": "^16.0.0",
     "unzip2": "^0.2.5",
-    "vue": "^2.1.10"
+    "vue": "^2.4.4"
   },
   "devDependencies": {
-    "electron-debug": "*",
+    "electron-debug": "^1.4.0",
+    "eslint": "^4.8.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.3.0",
     "gulp": "^3.9.1",
-    "gulp-cssmin": "^0.1.7",
+    "gulp-cssmin": "^0.2.0",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.2"
+    "gulp-sass": "^3.1.0"
   }
 }

@@ -1,30 +1,24 @@
 'use strict';
 
-const eventEmitter = require('./event');
-const path = require('path');
-const unzip = require('unzip2');
-const fs = require('fs');
-const os = require('os');
-
-let instance = null;
+const eventEmitter = require('./event'),
+    path = require('path'),
+    unzip = require('unzip2'),
+    fs = require('fs'),
+    os = require('os');
 
 class Archive {
-
     constructor() {
-        if (!instance) {
-            instance = this;
-        }
         this.data = {
             list: null,
             dir: null,
             file: null
         };
-        return instance;
     }
 
     unpack(file) {
         this.reset();
         let inputFileName = path.basename(file);
+
         this.data = {
             list: [],
             dir: os.tmpdir() + `/.${inputFileName}/`,
@@ -34,6 +28,7 @@ class Archive {
         };
         if (!fs.existsSync(this.data.dir)) fs.mkdirSync(this.data.dir);
         let idx = 0;
+
         fs.createReadStream(file)
             .on('open', () => {
                 eventEmitter.emit('extract-started', this.data);
@@ -42,12 +37,14 @@ class Archive {
             .on('entry', (entry) => {
                 let fileName = path.basename(entry.path);
                 let type = entry.type;
-                if (type == "File") {
+
+                if (type === "File") {
                     let item = {
                         id: idx++,
                         name: fileName,
                         path: this.data.dir + fileName
                     };
+
                     this.data.list.push(item);
                     entry.pipe(
                         fs.createWriteStream(this.data.dir + fileName)

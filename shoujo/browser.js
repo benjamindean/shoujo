@@ -20,7 +20,7 @@ const initialState = function () {
         images_count: 0,
         last_image: config.get('last_image') || 0,
         active_image: config.get('last_image') || 0
-    }
+    };
 };
 
 elementReady('#shoujo').then(function () {
@@ -74,6 +74,7 @@ elementReady('#shoujo').then(function () {
             },
             reset: function () {
                 let initialData = initialState();
+
                 for (let prop in initialData) {
                     this[prop] = initialData[prop];
                 }
@@ -97,12 +98,14 @@ elementReady('#shoujo').then(function () {
                 }
 
                 let image = this.images[id];
+
                 if (!image) return;
                 this.updateCounter();
                 this.handleAttributes(image);
             },
             onClickThumb: function (e) {
                 let id = e.target.getAttribute('data-id');
+
                 this.switchImage(id, 'thumb');
             },
             scrollToThumb(id) {
@@ -111,11 +114,13 @@ elementReady('#shoujo').then(function () {
             },
             onClickImage: function (e) {
                 let id = parseInt(e.target.getAttribute('data-id')) + 1;
+
                 this.switchImage(id, 'forward');
             },
             toggleFullScreen: function (state) {
                 if (!this.file) return;
                 let body = $('body');
+
                 state ? body.classList.add('fullscreen') : body.classList.remove('fullscreen');
                 this.scrollToThumb(this.active_image);
             },
@@ -151,6 +156,7 @@ elementReady('#shoujo').then(function () {
     ipcRenderer.on('switch-image', function (event, direction) {
         let el = $('#mainImage'),
             id = el ? el.getAttribute('data-id') : false;
+
         vm.switchImage(id, direction);
     });
 });

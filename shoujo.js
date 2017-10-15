@@ -16,12 +16,14 @@ class Shoujo {
     constructor() {
         this.file = Shoujo.getFile();
         let mainWindowInstance = new mainWindow(this.file);
+
         mainWindowInstance.open();
         this.mainWindow = mainWindowInstance.window;
     }
 
     static getFile() {
         let arg = process.argv[2] || process.argv[1];
+
         return ((arg && arg !== '.') ? arg : false) || config.get('last_file');
     }
 

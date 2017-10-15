@@ -1,0 +1,11 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "fix": "true"
+  },
+  "rules": {
+    "semi": 2,
+    "newline-after-var": "warn"
+  }
+}

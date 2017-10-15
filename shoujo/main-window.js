@@ -26,8 +26,7 @@ class MainWindow {
             center: true,
             show: false,
             webPreferences: {
-                preload: path.join(__dirname, 'browser.js'),
-                nodeIntegration: false,
+                nodeIntegration: true,
                 webSecurity: false
             },
             icon: path.join(__dirname, '../resources/icons/icon.png')
@@ -51,7 +50,7 @@ class MainWindow {
 
     attachEvents() {
         eventEmitter.on('extract-started', (data) => {
-           this.window.setTitle(app.getName() + ` - ${data.fileName}`)
+           this.window.setTitle(app.getName() + ` - ${data.fileName}`);
         });
 
         this.window.on('ready-to-show', function () {

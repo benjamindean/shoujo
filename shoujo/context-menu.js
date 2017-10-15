@@ -29,12 +29,13 @@ function create(win) {
                             'title': app.getName(),
                             'message': 'Image has been saved to ' + app.getPath('downloads'),
                             'icon': props.srcURL
-                        }))
+                        }));
                 }
             });
         }
         if (menuTpl && menuTpl.length > 0) {
             const menu = (electron.Menu || electron.remote.Menu).buildFromTemplate(menuTpl);
+
             menu.popup(electron.remote ? electron.remote.getCurrentWindow() : win);
         }
     });
